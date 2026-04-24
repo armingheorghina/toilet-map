@@ -27,6 +27,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Write Mapbox config from secret
+        env:
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+        run: |
+          if [ -z "${MAPBOX_ACCESS_TOKEN}" ]; then
+            echo "::error::Repository secret MAPBOX_ACCESS_TOKEN is not set. Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          node <<'NODE'
+          const fs = require("fs");
+          const token = process.env.MAPBOX_ACCESS_TOKEN;
+          const body =
+            "/**\n * Generated in CI from MAPBOX_ACCESS_TOKEN — do not commit.\n */\n" +
+            `export const MAPBOX_ACCESS_TOKEN = ${JSON.stringify(token)};\n`;
+          fs.writeFileSync("src/mapbox-config.js", body, "utf8");
+          NODE
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

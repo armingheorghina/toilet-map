@@ -31,6 +31,7 @@
     "lng": 23.58962,
     "access": "yes",
     "fee": "yes",
+    "charge": "3 RON",
     "wheelchair": null,
     "openingHours": null,
     "notes": "Fallback sample for offline or rate-limited development."

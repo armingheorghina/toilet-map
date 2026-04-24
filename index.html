@@ -6,14 +6,9 @@
     <title>Toilet Map Cluj-Napoca</title>
     <meta
       name="description"
-      content="Mobile-friendly OpenStreetMap-based map of public toilets in Cluj-Napoca, including custom locations."
+      content="Mobile-friendly MapLibre map of public toilets in Cluj-Napoca, including custom locations."
     >
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    >
+    <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
     <link rel="stylesheet" href="./src/styles.css">
   </head>
   <body>
@@ -31,10 +26,6 @@
             Browse public toilets from OpenStreetMap across Cluj-Napoca with a simple mobile-friendly map.
           </p>
           <div class="legend" aria-label="Marker legend">
-            <span class="legend-item">
-              <span class="legend-dot legend-dot-osm"></span>
-              Map data (OSM)
-            </span>
             <span class="legend-item">
               <span class="legend-dot legend-dot-custom"></span>
               Your saved toilets
@@ -122,11 +113,7 @@
       </a>
     </div>
 
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin=""
-    ></script>
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
     <script type="module" src="./src/app.js"></script>
   </body>
 </html>

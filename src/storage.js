@@ -43,6 +43,7 @@ export function createCustomToilet({ name, notes, lat, lng }) {
     lng: Number(lng),
     access: null,
     fee: null,
+    charge: null,
     wheelchair: null,
     openingHours: null
   };

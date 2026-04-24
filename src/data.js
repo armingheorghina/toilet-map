@@ -1,13 +1,13 @@
-/** Default map view for Cluj-Napoca. */
+/** Central Park area — initial map view on load (one zoom level past previous default). */
 export const CLUJ_CENTER = {
-  lat: 46.7712,
-  lng: 23.6236,
-  zoom: 13
+  lat: 46.77021420094332,
+  lng: 23.578740009192746,
+  zoom: 15
 };
 
 const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 const FALLBACK_DATA_URL = "./src/fallback-toilets.json";
-const CACHE_KEY = "cluj-public-toilets-cache-v1";
+const CACHE_KEY = "cluj-public-toilets-cache-v2";
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 
 // --- Cache (OSM snapshot, separate from user custom toilets in storage.js) ---
@@ -60,6 +60,7 @@ function normalizeToilet(item) {
     lng: Number(item.lng),
     access: item.access ?? null,
     fee: item.fee ?? null,
+    charge: item.charge ?? null,
     wheelchair: item.wheelchair ?? null,
     openingHours: item.openingHours ?? item.opening_hours ?? null,
     notes: item.notes ?? null
@@ -82,6 +83,7 @@ function normalizeOverpassElement(element) {
     lng,
     access: element.tags?.access ?? null,
     fee: element.tags?.fee ?? null,
+    charge: element.tags?.charge ?? null,
     wheelchair: element.tags?.wheelchair ?? null,
     opening_hours: element.tags?.opening_hours ?? null,
     notes: element.tags?.description ?? null
