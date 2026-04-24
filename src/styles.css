@@ -297,9 +297,7 @@ button {
   border-radius: 18px;
   background: rgba(8, 17, 29, 0.94);
   border: 2px solid rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 12px 26px rgba(0, 0, 0, 0.34),
-    0 0 0 6px var(--marker-glow);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
 }
 
 .toilet-marker-image-shell {
