@@ -1,5 +1,15 @@
 const STORAGE_KEY = "cluj-public-toilets-custom";
 
+function isValidCustomToilet(item) {
+  return (
+    item &&
+    item.source === "custom" &&
+    typeof item.name === "string" &&
+    Number.isFinite(Number(item.lat)) &&
+    Number.isFinite(Number(item.lng))
+  );
+}
+
 export function loadCustomToilets() {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -36,14 +46,4 @@ export function createCustomToilet({ name, notes, lat, lng }) {
     wheelchair: null,
     openingHours: null
   };
-}
-
-function isValidCustomToilet(item) {
-  return (
-    item &&
-    item.source === "custom" &&
-    typeof item.name === "string" &&
-    Number.isFinite(Number(item.lat)) &&
-    Number.isFinite(Number(item.lng))
-  );
 }

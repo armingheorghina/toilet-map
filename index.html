@@ -33,9 +33,45 @@
           <div class="legend" aria-label="Marker legend">
             <span class="legend-item">
               <span class="legend-dot legend-dot-osm"></span>
-              Toilet location
+              Map data (OSM)
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot legend-dot-custom"></span>
+              Your saved toilets
             </span>
           </div>
+
+          <details class="add-toilet-panel">
+            <summary class="add-toilet-summary">Add a toilet</summary>
+            <form id="add-toilet-form" class="add-toilet-form">
+              <p class="add-toilet-hint">
+                Add a place you want to remember. It stays on this device only.
+              </p>
+              <label class="field">
+                <span class="field-label">Name</span>
+                <input name="name" type="text" required autocomplete="off" placeholder="e.g. Mall restroom">
+              </label>
+              <label class="field">
+                <span class="field-label">Notes (optional)</span>
+                <textarea name="notes" rows="2" placeholder="Floor, code, hours…"></textarea>
+              </label>
+              <div class="coords-row">
+                <label class="field field--narrow">
+                  <span class="field-label">Latitude</span>
+                  <input name="lat" type="text" inputmode="decimal" required placeholder="46.77">
+                </label>
+                <label class="field field--narrow">
+                  <span class="field-label">Longitude</span>
+                  <input name="lng" type="text" inputmode="decimal" required placeholder="23.59">
+                </label>
+              </div>
+              <div class="add-toilet-actions">
+                <button type="button" id="pick-location-button" class="ghost-button">Pick on map</button>
+                <button type="button" id="use-map-center-button" class="ghost-button">Use map center</button>
+                <button type="submit" class="primary-button">Save toilet</button>
+              </div>
+            </form>
+          </details>
         </section>
 
         <section class="map-card">
@@ -65,6 +101,25 @@
           </div>
         </section>
       </main>
+    </div>
+
+    <div id="support-footer" class="support-footer" hidden>
+      <p class="support-footer-text">If you like this project, support me with a coffee</p>
+      <a
+        id="support-footer-link"
+        class="support-footer-link"
+        href="#"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <img
+          src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+          alt="Buy Me a Coffee"
+          width="160"
+          height="45"
+          loading="lazy"
+        >
+      </a>
     </div>
 
     <script

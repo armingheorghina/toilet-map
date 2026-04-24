@@ -31,6 +31,7 @@ body {
 
 body {
   min-height: 100vh;
+  padding-bottom: 5.5rem;
 }
 
 button,
@@ -145,6 +146,83 @@ button {
   background: var(--custom);
 }
 
+.add-toilet-panel {
+  margin-top: 1rem;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(9, 17, 29, 0.45);
+  overflow: hidden;
+}
+
+.add-toilet-summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.85rem 1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.add-toilet-summary::-webkit-details-marker {
+  display: none;
+}
+
+.add-toilet-summary::after {
+  content: "▸";
+  float: right;
+  opacity: 0.65;
+  transition: transform 0.15s ease;
+}
+
+details[open] > .add-toilet-summary::after {
+  transform: rotate(90deg);
+}
+
+.add-toilet-form {
+  padding: 0 1rem 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.add-toilet-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(9, 17, 29, 0.55);
+  color: var(--text);
+  padding: 0.55rem 0.65rem;
+}
+
+.coords-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+.add-toilet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .map-card {
   padding: 0.75rem;
 }
@@ -184,8 +262,8 @@ button {
 }
 
 .map-control-button,
- .primary-button,
- .ghost-button {
+.primary-button,
+.ghost-button {
   border: 0;
   border-radius: 14px;
   min-height: 46px;
@@ -197,6 +275,24 @@ button {
 .primary-button:active,
 .ghost-button:active {
   transform: scale(0.98);
+}
+
+.primary-button {
+  background: var(--accent);
+  color: #04251c;
+  font-weight: 600;
+}
+
+.ghost-button {
+  background: rgba(159, 177, 199, 0.1);
+  color: var(--text);
+  border: 1px solid var(--border);
+  min-height: 42px;
+}
+
+.ghost-button[data-active="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .map-control-button {
@@ -223,6 +319,52 @@ button {
   object-position: center;
 }
 
+.toilet-marker-osm .toilet-marker-image {
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.85));
+}
+
+.toilet-marker-custom .toilet-marker-image {
+  filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.9));
+}
+
+.leaflet-container.map--placing {
+  cursor: crosshair;
+}
+
+.support-footer {
+  position: fixed;
+  z-index: 2000;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  max-width: 11.5rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.support-footer-text {
+  margin: 0 0 0.45rem;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.support-footer-link {
+  display: inline-block;
+  line-height: 0;
+}
+
+.support-footer-link img {
+  width: 100%;
+  max-width: 140px;
+  height: auto;
+  border-radius: 8px;
+}
+
 .leaflet-popup-content-wrapper {
   background: #d8dde3;
   color: #223040;
@@ -239,10 +381,30 @@ button {
   min-width: 116px;
 }
 
+.popup-source {
+  margin: 0 0 0.35rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #5a6a7a;
+}
+
 .popup-card h3 {
   margin: 0 0 0.42rem;
   font-size: 0.88rem;
   line-height: 1.2;
+  color: #223040;
+}
+
+.popup-meta {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #314455;
+}
+
+.popup-meta-label {
+  font-weight: 600;
   color: #223040;
 }
 

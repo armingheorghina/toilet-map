@@ -1,3 +1,9 @@
+const TOILET_ICON_URL = "./src/toilet-funny-dark.svg";
+
+const TILE_LAYER_URL = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
+const TILE_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -6,8 +12,6 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 }
-
-const TOILET_ICON_URL = "./src/toilet-marker.png";
 
 function createToiletIcon(kind) {
   return L.divIcon({
@@ -24,25 +28,45 @@ function createToiletIcon(kind) {
 }
 
 const osmIcon = createToiletIcon("osm");
-
 const customIcon = createToiletIcon("custom");
 
-function createPopupContent(toilet) {
-  const feeValue = toilet.fee ? toilet.fee.toLowerCase() : "no";
+function feeLabelAndClass(toilet) {
+  const feeValue = toilet.fee ? String(toilet.fee).toLowerCase() : "no";
   const isPaid = feeValue === "yes";
-  const feeLabel = isPaid ? "Fee required" : "Free";
+  return {
+    text: isPaid ? "Fee required" : "Free",
+    className: isPaid ? "popup-fee-paid" : "popup-fee-free"
+  };
+}
+
+function optionalRow(label, value) {
+  if (value == null || String(value).trim() === "") {
+    return "";
+  }
+  return `<p class="popup-meta"><span class="popup-meta-label">${escapeHtml(label)}</span> ${escapeHtml(String(value))}</p>`;
+}
+
+function createPopupContent(toilet) {
+  const sourceLabel = toilet.source === "custom" ? "Your saved location" : "OpenStreetMap";
+  const fee = feeLabelAndClass(toilet);
 
   return `
     <article class="popup-card">
+      <p class="popup-source">${escapeHtml(sourceLabel)}</p>
       <h3>${escapeHtml(toilet.name)}</h3>
-      <p class="popup-fee ${isPaid ? "popup-fee-paid" : "popup-fee-free"}">${feeLabel}</p>
+      <p class="popup-fee ${fee.className}">${fee.text}</p>
+      ${optionalRow("Access", toilet.access)}
+      ${optionalRow("Wheelchair", toilet.wheelchair)}
+      ${optionalRow("Hours", toilet.openingHours)}
+      ${optionalRow("Notes", toilet.notes)}
     </article>
   `;
 }
 
 function buildMarker(toilet) {
+  const icon = toilet.source === "custom" ? customIcon : osmIcon;
   return L.marker([toilet.lat, toilet.lng], {
-    icon: toilet.source === "custom" ? customIcon : osmIcon,
+    icon,
     title: toilet.name
   }).bindPopup(createPopupContent(toilet));
 }
@@ -55,11 +79,10 @@ export function createMap({ containerId, center }) {
     preferCanvas: true
   });
 
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+  L.tileLayer(TILE_LAYER_URL, {
     maxZoom: 20,
     subdomains: "abcd",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    attribution: TILE_ATTRIBUTION
   }).addTo(map);
 
   return map;
@@ -67,6 +90,5 @@ export function createMap({ containerId, center }) {
 
 export function renderToilets(map, toilets) {
   const markers = toilets.map(buildMarker);
-  const layerGroup = L.layerGroup(markers).addTo(map);
-  return layerGroup;
+  return L.layerGroup(markers).addTo(map);
 }

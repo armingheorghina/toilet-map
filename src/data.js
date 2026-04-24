@@ -1,4 +1,5 @@
-const CLUJ_CENTER = {
+/** Default map view for Cluj-Napoca. */
+export const CLUJ_CENTER = {
   lat: 46.7712,
   lng: 23.6236,
   zoom: 13
@@ -7,17 +8,9 @@ const CLUJ_CENTER = {
 const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 const FALLBACK_DATA_URL = "./src/fallback-toilets.json";
 const CACHE_KEY = "cluj-public-toilets-cache-v1";
-const CACHE_TTL_MS = 1000 * 60 * 60 * 12;
+const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 
-async function fetchFallbackToilets() {
-  const response = await fetch(FALLBACK_DATA_URL);
-  if (!response.ok) {
-    throw new Error("Fallback toilet dataset could not be loaded.");
-  }
-
-  const items = await response.json();
-  return items.map(normalizeToilet);
-}
+// --- Cache (OSM snapshot, separate from user custom toilets in storage.js) ---
 
 function readCachedToilets() {
   try {
@@ -56,18 +49,7 @@ function writeCachedToilets(toilets) {
   }
 }
 
-function buildOverpassQuery() {
-  return `
-[out:json][timeout:25];
-area["name"="Cluj-Napoca"]["boundary"="administrative"]->.searchArea;
-(
-  node["amenity"="toilets"](area.searchArea);
-  way["amenity"="toilets"](area.searchArea);
-  relation["amenity"="toilets"](area.searchArea);
-);
-out center tags;
-`.trim();
-}
+// --- Normalization ---
 
 function normalizeToilet(item) {
   return {
@@ -106,6 +88,31 @@ function normalizeOverpassElement(element) {
   });
 }
 
+// --- Network ---
+
+function buildOverpassQuery() {
+  return `
+[out:json][timeout:25];
+area["name"="Cluj-Napoca"]["boundary"="administrative"]->.searchArea;
+(
+  node["amenity"="toilets"](area.searchArea);
+  way["amenity"="toilets"](area.searchArea);
+  relation["amenity"="toilets"](area.searchArea);
+);
+out center tags;
+`.trim();
+}
+
+async function fetchFallbackToilets() {
+  const response = await fetch(FALLBACK_DATA_URL);
+  if (!response.ok) {
+    throw new Error("Fallback toilet dataset could not be loaded.");
+  }
+
+  const items = await response.json();
+  return items.map(normalizeToilet);
+}
+
 async function fetchOsmToilets() {
   const response = await fetch(OVERPASS_URL, {
     method: "POST",
@@ -125,6 +132,10 @@ async function fetchOsmToilets() {
     .filter(Boolean);
 }
 
+/**
+ * Returns OSM-derived toilets (cached, live, or fallback JSON).
+ * Does not include user custom toilets; merge those in the app layer.
+ */
 export async function getToilets() {
   const cachedToilets = readCachedToilets();
   if (cachedToilets) {
@@ -156,5 +167,3 @@ export async function getToilets() {
     };
   }
 }
-
-export { CLUJ_CENTER };
