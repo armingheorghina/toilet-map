@@ -1,16 +1,16 @@
 :root {
-  --bg: #f5f1e8;
-  --surface: rgba(255, 250, 242, 0.92);
-  --surface-strong: #fffaf3;
-  --text: #1f2a1f;
-  --muted: #5b6558;
-  --border: rgba(31, 42, 31, 0.12);
-  --accent: #0f766e;
-  --accent-strong: #115e59;
-  --danger: #b42318;
-  --shadow: 0 20px 40px rgba(31, 42, 31, 0.12);
-  --osm: #1f7a8c;
-  --custom: #dc5f00;
+  --bg: #08111d;
+  --surface: rgba(12, 21, 34, 0.92);
+  --surface-strong: #112034;
+  --text: #f5f8ff;
+  --muted: #9fb1c7;
+  --border: rgba(159, 177, 199, 0.16);
+  --accent: #20c997;
+  --accent-strong: #17b486;
+  --danger: #ff7a7a;
+  --shadow: 0 24px 54px rgba(0, 0, 0, 0.34);
+  --osm: #38bdf8;
+  --custom: #f59e0b;
 }
 
 * {
@@ -24,9 +24,9 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 32%),
-    radial-gradient(circle at top right, rgba(220, 95, 0, 0.14), transparent 28%),
-    linear-gradient(180deg, #efe7d6 0%, #f8f4ec 48%, #efe9dd 100%);
+    radial-gradient(circle at top left, rgba(32, 201, 151, 0.18), transparent 26%),
+    radial-gradient(circle at top right, rgba(56, 189, 248, 0.14), transparent 24%),
+    linear-gradient(180deg, #07101b 0%, #0a1421 52%, #0d1827 100%);
 }
 
 body {
@@ -95,6 +95,28 @@ button {
   color: var(--muted);
 }
 
+.map-helper {
+  margin-bottom: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(135deg, rgba(17, 32, 52, 0.92), rgba(13, 24, 39, 0.84));
+}
+
+.map-helper-title {
+  margin: 0 0 0.3rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.map-helper-copy {
+  margin: 0;
+  color: var(--text);
+}
+
 .legend {
   display: flex;
   flex-wrap: wrap;
@@ -127,36 +149,6 @@ button {
   padding: 0.75rem;
 }
 
-.selection-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-  padding: 0.85rem 0.9rem;
-  border-radius: 18px;
-  background: rgba(255, 252, 246, 0.88);
-  border: 1px solid var(--border);
-}
-
-.selection-copy {
-  min-width: 0;
-}
-
-.selection-label {
-  margin: 0 0 0.2rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.selection-coordinates {
-  margin: 0;
-  font-weight: 600;
-  word-break: break-word;
-}
-
 .status-row {
   margin-bottom: 0.75rem;
 }
@@ -180,6 +172,7 @@ button {
   min-height: 420px;
   border-radius: 20px;
   overflow: hidden;
+  filter: saturate(1.08) contrast(1.01);
 }
 
 .map-controls {
@@ -208,9 +201,10 @@ button {
 
 .map-control-button {
   min-width: 46px;
-  background: rgba(255, 250, 243, 0.92);
+  background: rgba(9, 17, 29, 0.88);
   box-shadow: var(--shadow);
   font-size: 1.4rem;
+  color: var(--text);
 }
 
 .primary-button {
@@ -223,18 +217,8 @@ button {
 }
 
 .ghost-button {
-  background: #ece5d6;
+  background: #16263b;
   color: var(--text);
-}
-
-.compact-button {
-  min-height: 42px;
-  white-space: nowrap;
-}
-
-.compact-button[data-active="true"] {
-  background: #ffe8d3;
-  color: #9a3412;
 }
 
 .dialog {
@@ -276,7 +260,7 @@ button {
   margin: 0;
   padding: 0.75rem;
   border-radius: 14px;
-  background: #f8f1e4;
+  background: #16263b;
   color: var(--text);
 }
 
@@ -287,10 +271,11 @@ button {
 .dialog-form input,
 .dialog-form textarea {
   width: 100%;
-  border: 1px solid rgba(31, 42, 31, 0.16);
+  border: 1px solid rgba(159, 177, 199, 0.18);
   border-radius: 12px;
   padding: 0.75rem;
-  background: #fffdf8;
+  background: #0f1b2d;
+  color: var(--text);
 }
 
 .dialog-actions {
@@ -304,44 +289,60 @@ button {
   flex: 1;
 }
 
-.marker {
-  display: block;
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  border: 3px solid rgba(255, 255, 255, 0.95);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+.toilet-marker {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 18px;
+  background: rgba(8, 17, 29, 0.94);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.34),
+    0 0 0 6px var(--marker-glow);
 }
 
-.marker-osm {
-  background: var(--osm);
+.toilet-marker-image-shell {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
 }
 
-.marker-custom {
-  background: var(--custom);
+.toilet-marker-image {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  object-position: center;
 }
 
 .popup-card h3 {
-  margin: 0 0 0.6rem;
+  margin: 0 0 0.55rem;
 }
 
-.popup-details {
-  display: grid;
-  gap: 0.45rem;
-}
-
-.popup-row {
-  display: grid;
-  gap: 0.15rem;
-}
-
-.popup-label {
+.popup-fee {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
   font-weight: 700;
 }
 
-.popup-empty {
-  margin: 0;
-  color: var(--muted);
+.popup-fee-free {
+  background: rgba(32, 201, 151, 0.16);
+  color: #74f0c4;
+}
+
+.popup-fee-paid {
+  background: rgba(245, 158, 11, 0.16);
+  color: #ffc86a;
 }
 
 @media (max-width: 720px) {
@@ -365,11 +366,6 @@ button {
   }
 
   .dialog-actions {
-    flex-direction: column;
-  }
-
-  .selection-bar {
-    align-items: flex-start;
     flex-direction: column;
   }
 

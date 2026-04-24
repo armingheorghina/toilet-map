@@ -13,7 +13,6 @@ const addToiletDialog = document.querySelector("#add-toilet-dialog");
 const addToiletForm = document.querySelector("#add-toilet-form");
 const closeDialogButton = document.querySelector("#close-dialog-button");
 const useMapHintButton = document.querySelector("#use-map-hint-button");
-const pickOnMapButton = document.querySelector("#pick-on-map-button");
 const zoomInButton = document.querySelector("#zoom-in-button");
 const zoomOutButton = document.querySelector("#zoom-out-button");
 const latInput = document.querySelector("#toilet-lat");
@@ -27,8 +26,6 @@ let osmToilets = [];
 let customToilets = loadCustomToilets();
 let currentLayer = null;
 let selectedLatLng = null;
-let pickModeEnabled = false;
-let selectionMarker = null;
 
 function updateStatus(message, isError = false) {
   statusMessage.textContent = message;
@@ -44,9 +41,7 @@ function refreshMarkers() {
 }
 
 function openDialog() {
-  if (!selectedLatLng) {
-    storeSelectedLatLng(map.getCenter());
-  }
+  storeSelectedLatLng(map.getCenter());
 
   addToiletDialog.showModal();
   nameInput.focus();
@@ -62,39 +57,15 @@ function formatLatLng(latlng) {
 
 function updateSelectionSummary() {
   if (!selectedLatLng) {
-    selectionCoordinates.textContent = "No map location selected yet.";
-    dialogSelectionHint.textContent = "No map point selected yet. The current map center will be used.";
+    selectionCoordinates.textContent =
+      "Move the map to the right area, then tap Add toilet. The current center is used automatically.";
+    dialogSelectionHint.textContent = "Current map center will be used.";
     return;
   }
 
   const formatted = formatLatLng(selectedLatLng);
-  selectionCoordinates.textContent = formatted;
-  dialogSelectionHint.textContent = `Selected map point: ${formatted}`;
-}
-
-function refreshSelectionMarker() {
-  if (selectionMarker) {
-    selectionMarker.remove();
-    selectionMarker = null;
-  }
-
-  if (!selectedLatLng) {
-    return;
-  }
-
-  selectionMarker = L.circleMarker([selectedLatLng.lat, selectedLatLng.lng], {
-    radius: 10,
-    weight: 3,
-    color: "#dc5f00",
-    fillColor: "#fff4e8",
-    fillOpacity: 0.9
-  }).addTo(map);
-}
-
-function setPickMode(enabled) {
-  pickModeEnabled = enabled;
-  pickOnMapButton.textContent = enabled ? "Picking..." : "Pick on map";
-  pickOnMapButton.dataset.active = enabled ? "true" : "false";
+  selectionCoordinates.textContent = `Current center: ${formatted}`;
+  dialogSelectionHint.textContent = `The new toilet will be saved at ${formatted}.`;
 }
 
 function storeSelectedLatLng(latlng) {
@@ -102,7 +73,6 @@ function storeSelectedLatLng(latlng) {
   latInput.value = latlng.lat.toFixed(6);
   lngInput.value = latlng.lng.toFixed(6);
   updateSelectionSummary();
-  refreshSelectionMarker();
 }
 
 async function initialize() {
@@ -119,31 +89,16 @@ async function initialize() {
   }
 }
 
-map.on("click", (event) => {
-  storeSelectedLatLng(event.latlng);
+map.on("moveend", () => {
+  storeSelectedLatLng(map.getCenter());
 
-  if (pickModeEnabled) {
-    setPickMode(false);
-    window.setTimeout(openDialog, 0);
-    updateStatus("Map point selected. Add the toilet details and save.");
-  } else if (addToiletDialog.open) {
-    updateStatus("Map position updated for the custom toilet form.");
-  } else {
-    updateStatus("Map position saved. Tap Add toilet to create a custom marker.");
+  if (addToiletDialog.open) {
+    updateStatus("Coordinates updated from the current map center.");
   }
 });
 
 addToiletButton.addEventListener("click", openDialog);
 closeDialogButton.addEventListener("click", closeDialog);
-pickOnMapButton.addEventListener("click", () => {
-  const nextState = !pickModeEnabled;
-  setPickMode(nextState);
-  updateStatus(
-    nextState
-      ? "Pick mode is on. Tap the map to choose a location for a custom toilet."
-      : "Pick mode is off."
-  );
-});
 useMapHintButton.addEventListener("click", () => {
   storeSelectedLatLng(map.getCenter());
   updateStatus("Coordinates were updated using the current map center.");
@@ -164,7 +119,6 @@ addToiletForm.addEventListener("submit", (event) => {
   refreshMarkers();
   storeSelectedLatLng({ lat: customToilet.lat, lng: customToilet.lng });
   map.setView([customToilet.lat, customToilet.lng], Math.max(map.getZoom(), 16));
-  setPickMode(false);
   closeDialog();
   addToiletForm.reset();
   updateStatus(`Saved custom toilet "${customToilet.name}" on this device.`);
@@ -173,5 +127,6 @@ addToiletForm.addEventListener("submit", (event) => {
 zoomInButton.addEventListener("click", () => map.zoomIn());
 zoomOutButton.addEventListener("click", () => map.zoomOut());
 
+storeSelectedLatLng(map.getCenter());
 updateSelectionSummary();
 initialize();

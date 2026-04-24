@@ -52,16 +52,11 @@
             </p>
           </div>
 
-          <div class="selection-bar" aria-label="Custom toilet selection tools">
-            <div class="selection-copy">
-              <p class="selection-label">Selected spot</p>
-              <p id="selection-coordinates" class="selection-coordinates">
-                No map location selected yet.
-              </p>
-            </div>
-            <button id="pick-on-map-button" class="ghost-button compact-button" type="button">
-              Pick on map
-            </button>
+          <div class="map-helper" aria-label="Map instructions">
+            <p class="map-helper-title">How to add a toilet</p>
+            <p id="selection-coordinates" class="map-helper-copy">
+              Move the map to the right area, then tap Add toilet. The current center is used automatically.
+            </p>
           </div>
 
           <div class="map-frame">
@@ -89,11 +84,11 @@
         </div>
 
         <p class="dialog-copy">
-          Pick a point on the map or edit the coordinates manually before saving.
+          The current map center is used for new toilets. You can fine-tune the coordinates if needed.
         </p>
 
         <p id="dialog-selection-hint" class="dialog-selection-hint">
-          No map point selected yet. The current map center will be used.
+          Current map center will be used.
         </p>
 
         <label for="toilet-name">Label</label>

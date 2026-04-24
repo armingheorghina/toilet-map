@@ -1,48 +1,46 @@
-const osmIcon = L.divIcon({
-  className: "custom-div-icon",
-  html: '<span class="marker marker-osm" aria-hidden="true"></span>',
-  iconSize: [18, 18],
-  iconAnchor: [9, 9],
-  popupAnchor: [0, -10]
-});
-
-const customIcon = L.divIcon({
-  className: "custom-div-icon",
-  html: '<span class="marker marker-custom" aria-hidden="true"></span>',
-  iconSize: [18, 18],
-  iconAnchor: [9, 9],
-  popupAnchor: [0, -10]
-});
-
-function buildDetailsList(toilet) {
-  const details = [
-    ["Source", toilet.source === "custom" ? "Custom location" : "OpenStreetMap"],
-    ["Access", toilet.access],
-    ["Fee", toilet.fee],
-    ["Wheelchair", toilet.wheelchair],
-    ["Opening hours", toilet.openingHours],
-    ["Notes", toilet.notes]
-  ].filter(([, value]) => value);
-
-  if (details.length === 0) {
-    return "<p class=\"popup-empty\">No extra details available.</p>";
-  }
-
-  const rows = details
-    .map(
-      ([label, value]) =>
-        `<div class="popup-row"><span class="popup-label">${label}</span><span>${value}</span></div>`
-    )
-    .join("");
-
-  return `<div class="popup-details">${rows}</div>`;
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
+const TOILET_ICON_URL = "./src/toilet-marker.png";
+
+function createToiletIcon(kind) {
+  const tone = kind === "custom" ? "#f59e0b" : "#38bdf8";
+  const glow = kind === "custom" ? "rgba(245, 158, 11, 0.28)" : "rgba(56, 189, 248, 0.28)";
+
+  return L.divIcon({
+    className: "custom-div-icon",
+    html: `
+      <span class="toilet-marker toilet-marker-${kind}" style="--marker-tone:${tone};--marker-glow:${glow};" aria-hidden="true">
+        <span class="toilet-marker-image-shell">
+          <img src="${TOILET_ICON_URL}" class="toilet-marker-image" alt="">
+        </span>
+      </span>
+    `,
+    iconSize: [44, 44],
+    iconAnchor: [22, 22],
+    popupAnchor: [0, -14]
+  });
+}
+
+const osmIcon = createToiletIcon("osm");
+
+const customIcon = createToiletIcon("custom");
+
 function createPopupContent(toilet) {
+  const feeValue = toilet.fee ? toilet.fee.toLowerCase() : "no";
+  const isPaid = feeValue === "yes";
+  const feeLabel = isPaid ? "Fee required" : "Free";
+
   return `
     <article class="popup-card">
-      <h3>${toilet.name}</h3>
-      ${buildDetailsList(toilet)}
+      <h3>${escapeHtml(toilet.name)}</h3>
+      <p class="popup-fee ${isPaid ? "popup-fee-paid" : "popup-fee-free"}">${feeLabel}</p>
     </article>
   `;
 }
@@ -58,12 +56,15 @@ export function createMap({ containerId, center }) {
   const map = L.map(containerId, {
     center: [center.lat, center.lng],
     zoom: center.zoom,
-    zoomControl: false
+    zoomControl: false,
+    preferCanvas: true
   });
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+    maxZoom: 20,
+    subdomains: "abcd",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
   }).addTo(map);
 
   return map;

@@ -6,6 +6,8 @@ const CLUJ_CENTER = {
 
 const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 const FALLBACK_DATA_URL = "./src/fallback-toilets.json";
+const CACHE_KEY = "cluj-public-toilets-cache-v1";
+const CACHE_TTL_MS = 1000 * 60 * 60 * 12;
 
 async function fetchFallbackToilets() {
   const response = await fetch(FALLBACK_DATA_URL);
@@ -15,6 +17,43 @@ async function fetchFallbackToilets() {
 
   const items = await response.json();
   return items.map(normalizeToilet);
+}
+
+function readCachedToilets() {
+  try {
+    const raw = window.localStorage.getItem(CACHE_KEY);
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.toilets) || typeof parsed.savedAt !== "number") {
+      return null;
+    }
+
+    if (Date.now() - parsed.savedAt > CACHE_TTL_MS) {
+      return null;
+    }
+
+    return parsed.toilets.map(normalizeToilet);
+  } catch (error) {
+    console.warn("Cached toilet data could not be read.", error);
+    return null;
+  }
+}
+
+function writeCachedToilets(toilets) {
+  try {
+    window.localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({
+        savedAt: Date.now(),
+        toilets
+      })
+    );
+  } catch (error) {
+    console.warn("Toilet data could not be cached.", error);
+  }
 }
 
 function buildOverpassQuery() {
@@ -87,12 +126,24 @@ async function fetchOsmToilets() {
 }
 
 export async function getToilets() {
+  const cachedToilets = readCachedToilets();
+  if (cachedToilets) {
+    return {
+      toilets: cachedToilets,
+      message: `Loaded ${cachedToilets.length} public toilets from cached map data.`,
+      usedFallback: false,
+      usedCache: true
+    };
+  }
+
   try {
     const toilets = await fetchOsmToilets();
+    writeCachedToilets(toilets);
     return {
       toilets,
       message: `Loaded ${toilets.length} public toilets from OpenStreetMap.`,
-      usedFallback: false
+      usedFallback: false,
+      usedCache: false
     };
   } catch (error) {
     const toilets = await fetchFallbackToilets();
@@ -100,6 +151,7 @@ export async function getToilets() {
       toilets,
       message: "Live OpenStreetMap data is unavailable, so a local fallback dataset is being shown.",
       usedFallback: true,
+      usedCache: false,
       error
     };
   }
