@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cluj Public Toilets Map</title>
+    <meta
+      name="description"
+      content="Mobile-friendly OpenStreetMap-based map of public toilets in Cluj-Napoca, including custom locations."
+    >
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    >
+    <link rel="stylesheet" href="./src/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Cluj-Napoca</p>
+          <h1>Public Toilets Map</h1>
+        </div>
+        <button id="add-toilet-button" class="primary-button" type="button">
+          Add toilet
+        </button>
+      </header>
+
+      <main class="page">
+        <section class="hero-card">
+          <p class="hero-text">
+            Browse public toilets from OpenStreetMap and save your own custom spots locally on this device.
+          </p>
+          <div class="legend" aria-label="Marker legend">
+            <span class="legend-item">
+              <span class="legend-dot legend-dot-osm"></span>
+              OpenStreetMap
+            </span>
+            <span class="legend-item">
+              <span class="legend-dot legend-dot-custom"></span>
+              Custom
+            </span>
+          </div>
+        </section>
+
+        <section class="map-card">
+          <div class="status-row">
+            <p id="status-message" class="status-message" role="status" aria-live="polite">
+              Loading map data...
+            </p>
+          </div>
+
+          <div class="map-frame">
+            <div id="map" aria-label="Map of public toilets in Cluj-Napoca"></div>
+            <div class="map-controls" aria-label="Map zoom controls">
+              <button id="zoom-in-button" class="map-control-button" type="button" aria-label="Zoom in">
+                +
+              </button>
+              <button id="zoom-out-button" class="map-control-button" type="button" aria-label="Zoom out">
+                -
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="add-toilet-dialog" class="dialog">
+      <form id="add-toilet-form" class="dialog-form" method="dialog">
+        <div class="dialog-header">
+          <h2>Add custom toilet</h2>
+          <button id="close-dialog-button" class="ghost-button" type="button" aria-label="Close add toilet form">
+            Close
+          </button>
+        </div>
+
+        <p class="dialog-copy">
+          Tap the map to prefill coordinates, or type them manually.
+        </p>
+
+        <label for="toilet-name">Label</label>
+        <input id="toilet-name" name="name" maxlength="80" required>
+
+        <label for="toilet-notes">Notes</label>
+        <textarea id="toilet-notes" name="notes" maxlength="240" rows="3"></textarea>
+
+        <label for="toilet-lat">Latitude</label>
+        <input id="toilet-lat" name="lat" type="number" step="any" required>
+
+        <label for="toilet-lng">Longitude</label>
+        <input id="toilet-lng" name="lng" type="number" step="any" required>
+
+        <div class="dialog-actions">
+          <button class="ghost-button" id="use-map-hint-button" type="button">
+            Use map position
+          </button>
+          <button class="primary-button" type="submit">Save toilet</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

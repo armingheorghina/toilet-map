@@ -1,0 +1,38 @@
+[
+  {
+    "id": "fallback-1",
+    "source": "osm",
+    "name": "Central Park Public Toilet",
+    "lat": 46.76886,
+    "lng": 23.57507,
+    "access": "yes",
+    "fee": "no",
+    "wheelchair": "limited",
+    "openingHours": null,
+    "notes": "Fallback sample near Parcul Central."
+  },
+  {
+    "id": "fallback-2",
+    "source": "osm",
+    "name": "Union Square Public Toilet",
+    "lat": 46.76942,
+    "lng": 23.58957,
+    "access": "yes",
+    "fee": "no",
+    "wheelchair": null,
+    "openingHours": null,
+    "notes": "Fallback sample near Piata Unirii."
+  },
+  {
+    "id": "fallback-3",
+    "source": "osm",
+    "name": "Railway Station Area Toilet",
+    "lat": 46.78458,
+    "lng": 23.58962,
+    "access": "yes",
+    "fee": "yes",
+    "wheelchair": null,
+    "openingHours": null,
+    "notes": "Fallback sample for offline or rate-limited development."
+  }
+]
