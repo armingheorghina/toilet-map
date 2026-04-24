@@ -52,7 +52,7 @@ button {
 .topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 1rem;
   margin-bottom: 1rem;
 }
@@ -91,7 +91,7 @@ button {
 
 .hero-text {
   margin: 0 0 0.75rem;
-  font-size: 1rem;
+  font-size: 0.98rem;
   color: var(--muted);
 }
 
@@ -172,7 +172,7 @@ button {
   min-height: 420px;
   border-radius: 20px;
   overflow: hidden;
-  filter: saturate(1.08) contrast(1.01);
+  filter: brightness(1.06) saturate(1.22) contrast(1.02);
 }
 
 .map-controls {
@@ -184,8 +184,8 @@ button {
 }
 
 .map-control-button,
-.primary-button,
-.ghost-button {
+ .primary-button,
+ .ghost-button {
   border: 0;
   border-radius: 14px;
   min-height: 46px;
@@ -200,126 +200,50 @@ button {
 }
 
 .map-control-button {
-  min-width: 46px;
+  min-width: 38px;
+  min-height: 38px;
   background: rgba(9, 17, 29, 0.88);
   box-shadow: var(--shadow);
-  font-size: 1.4rem;
+  font-size: 1.1rem;
+  padding: 0.35rem;
   color: var(--text);
-}
-
-.primary-button {
-  background: var(--accent);
-  color: #fff;
-}
-
-.primary-button:hover {
-  background: var(--accent-strong);
-}
-
-.ghost-button {
-  background: #16263b;
-  color: var(--text);
-}
-
-.dialog {
-  width: min(92vw, 420px);
-  border: 0;
-  border-radius: 20px;
-  padding: 0;
-  box-shadow: var(--shadow);
-}
-
-.dialog::backdrop {
-  background: rgba(15, 19, 15, 0.48);
-}
-
-.dialog-form {
-  display: grid;
-  gap: 0.7rem;
-  padding: 1rem;
-}
-
-.dialog-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.dialog-header h2 {
-  margin: 0;
-  font-size: 1.2rem;
-}
-
-.dialog-copy {
-  margin: 0;
-  color: var(--muted);
-}
-
-.dialog-selection-hint {
-  margin: 0;
-  padding: 0.75rem;
-  border-radius: 14px;
-  background: #16263b;
-  color: var(--text);
-}
-
-.dialog-form label {
-  font-weight: 600;
-}
-
-.dialog-form input,
-.dialog-form textarea {
-  width: 100%;
-  border: 1px solid rgba(159, 177, 199, 0.18);
-  border-radius: 12px;
-  padding: 0.75rem;
-  background: #0f1b2d;
-  color: var(--text);
-}
-
-.dialog-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-top: 0.25rem;
-}
-
-.dialog-actions > * {
-  flex: 1;
 }
 
 .toilet-marker {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 18px;
-  background: rgba(8, 17, 29, 0.94);
-  border: 2px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.34);
-}
-
-.toilet-marker-image-shell {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  overflow: hidden;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+  display: block;
+  width: 34px;
+  height: 34px;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.18));
 }
 
 .toilet-marker-image {
-  width: 24px;
-  height: 24px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
   object-position: center;
 }
 
+.leaflet-popup-content-wrapper {
+  background: #d8dde3;
+  color: #223040;
+  border-radius: 14px;
+  box-shadow: 0 12px 24px rgba(18, 24, 38, 0.18);
+}
+
+.leaflet-popup-tip {
+  background: #d8dde3;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  min-width: 116px;
+}
+
 .popup-card h3 {
-  margin: 0 0 0.55rem;
+  margin: 0 0 0.42rem;
+  font-size: 0.88rem;
+  line-height: 1.2;
+  color: #223040;
 }
 
 .popup-fee {
@@ -327,20 +251,21 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 38px;
-  padding: 0.55rem 0.8rem;
+  min-height: 30px;
+  padding: 0.35rem 0.62rem;
   border-radius: 999px;
   font-weight: 700;
+  font-size: 0.8rem;
 }
 
 .popup-fee-free {
-  background: rgba(32, 201, 151, 0.16);
-  color: #74f0c4;
+  background: rgba(96, 125, 139, 0.18);
+  color: #314455;
 }
 
 .popup-fee-paid {
-  background: rgba(245, 158, 11, 0.16);
-  color: #ffc86a;
+  background: rgba(120, 132, 145, 0.22);
+  color: #223040;
 }
 
 @media (max-width: 720px) {
@@ -350,21 +275,6 @@ button {
 
   .topbar {
     align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .topbar,
-  .dialog-actions {
-    width: 100%;
-  }
-
-  .primary-button,
-  .ghost-button {
-    width: 100%;
-  }
-
-  .dialog-actions {
-    flex-direction: column;
   }
 
   #map {

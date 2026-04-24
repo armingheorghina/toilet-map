@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cluj Public Toilets Map</title>
+    <title>Toilet Map Cluj-Napoca</title>
     <meta
       name="description"
       content="Mobile-friendly OpenStreetMap-based map of public toilets in Cluj-Napoca, including custom locations."
@@ -20,27 +20,20 @@
     <div class="app-shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Cluj-Napoca</p>
-          <h1>Public Toilets Map</h1>
+          <p class="eyebrow">Public Toilets</p>
+          <h1>Toilet Map Cluj-Napoca</h1>
         </div>
-        <button id="add-toilet-button" class="primary-button" type="button">
-          Add toilet
-        </button>
       </header>
 
       <main class="page">
         <section class="hero-card">
           <p class="hero-text">
-            Browse public toilets from OpenStreetMap and save your own custom spots locally on this device.
+            Browse public toilets from OpenStreetMap across Cluj-Napoca with a simple mobile-friendly map.
           </p>
           <div class="legend" aria-label="Marker legend">
             <span class="legend-item">
               <span class="legend-dot legend-dot-osm"></span>
-              OpenStreetMap
-            </span>
-            <span class="legend-item">
-              <span class="legend-dot legend-dot-custom"></span>
-              Custom
+              Toilet location
             </span>
           </div>
         </section>
@@ -53,9 +46,9 @@
           </div>
 
           <div class="map-helper" aria-label="Map instructions">
-            <p class="map-helper-title">How to add a toilet</p>
+            <p class="map-helper-title">Map guide</p>
             <p id="selection-coordinates" class="map-helper-copy">
-              Move the map to the right area, then tap Add toilet. The current center is used automatically.
+              Tap a toilet icon to quickly see whether it is free or requires a fee.
             </p>
           </div>
 
@@ -73,44 +66,6 @@
         </section>
       </main>
     </div>
-
-    <dialog id="add-toilet-dialog" class="dialog">
-      <form id="add-toilet-form" class="dialog-form" method="dialog">
-        <div class="dialog-header">
-          <h2>Add custom toilet</h2>
-          <button id="close-dialog-button" class="ghost-button" type="button" aria-label="Close add toilet form">
-            Close
-          </button>
-        </div>
-
-        <p class="dialog-copy">
-          The current map center is used for new toilets. You can fine-tune the coordinates if needed.
-        </p>
-
-        <p id="dialog-selection-hint" class="dialog-selection-hint">
-          Current map center will be used.
-        </p>
-
-        <label for="toilet-name">Label</label>
-        <input id="toilet-name" name="name" maxlength="80" required>
-
-        <label for="toilet-notes">Notes</label>
-        <textarea id="toilet-notes" name="notes" maxlength="240" rows="3"></textarea>
-
-        <label for="toilet-lat">Latitude</label>
-        <input id="toilet-lat" name="lat" type="number" step="any" required>
-
-        <label for="toilet-lng">Longitude</label>
-        <input id="toilet-lng" name="lng" type="number" step="any" required>
-
-        <div class="dialog-actions">
-          <button class="ghost-button" id="use-map-hint-button" type="button">
-            Use map position
-          </button>
-          <button class="primary-button" type="submit">Save toilet</button>
-        </div>
-      </form>
-    </dialog>
 
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"

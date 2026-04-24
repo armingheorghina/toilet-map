@@ -10,20 +10,15 @@ function escapeHtml(value) {
 const TOILET_ICON_URL = "./src/toilet-marker.png";
 
 function createToiletIcon(kind) {
-  const tone = kind === "custom" ? "#f59e0b" : "#38bdf8";
-  const glow = kind === "custom" ? "rgba(245, 158, 11, 0.28)" : "rgba(56, 189, 248, 0.28)";
-
   return L.divIcon({
     className: "custom-div-icon",
     html: `
-      <span class="toilet-marker toilet-marker-${kind}" style="--marker-tone:${tone};--marker-glow:${glow};" aria-hidden="true">
-        <span class="toilet-marker-image-shell">
-          <img src="${TOILET_ICON_URL}" class="toilet-marker-image" alt="">
-        </span>
+      <span class="toilet-marker toilet-marker-${kind}" aria-hidden="true">
+        <img src="${TOILET_ICON_URL}" class="toilet-marker-image" alt="">
       </span>
     `,
-    iconSize: [44, 44],
-    iconAnchor: [22, 22],
+    iconSize: [34, 34],
+    iconAnchor: [17, 17],
     popupAnchor: [0, -14]
   });
 }
