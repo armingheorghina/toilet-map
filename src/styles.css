@@ -127,6 +127,36 @@ button {
   padding: 0.75rem;
 }
 
+.selection-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.85rem 0.9rem;
+  border-radius: 18px;
+  background: rgba(255, 252, 246, 0.88);
+  border: 1px solid var(--border);
+}
+
+.selection-copy {
+  min-width: 0;
+}
+
+.selection-label {
+  margin: 0 0 0.2rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.selection-coordinates {
+  margin: 0;
+  font-weight: 600;
+  word-break: break-word;
+}
+
 .status-row {
   margin-bottom: 0.75rem;
 }
@@ -197,6 +227,16 @@ button {
   color: var(--text);
 }
 
+.compact-button {
+  min-height: 42px;
+  white-space: nowrap;
+}
+
+.compact-button[data-active="true"] {
+  background: #ffe8d3;
+  color: #9a3412;
+}
+
 .dialog {
   width: min(92vw, 420px);
   border: 0;
@@ -230,6 +270,14 @@ button {
 .dialog-copy {
   margin: 0;
   color: var(--muted);
+}
+
+.dialog-selection-hint {
+  margin: 0;
+  padding: 0.75rem;
+  border-radius: 14px;
+  background: #f8f1e4;
+  color: var(--text);
 }
 
 .dialog-form label {
@@ -317,6 +365,11 @@ button {
   }
 
   .dialog-actions {
+    flex-direction: column;
+  }
+
+  .selection-bar {
+    align-items: flex-start;
     flex-direction: column;
   }
 

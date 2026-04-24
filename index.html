@@ -52,6 +52,18 @@
             </p>
           </div>
 
+          <div class="selection-bar" aria-label="Custom toilet selection tools">
+            <div class="selection-copy">
+              <p class="selection-label">Selected spot</p>
+              <p id="selection-coordinates" class="selection-coordinates">
+                No map location selected yet.
+              </p>
+            </div>
+            <button id="pick-on-map-button" class="ghost-button compact-button" type="button">
+              Pick on map
+            </button>
+          </div>
+
           <div class="map-frame">
             <div id="map" aria-label="Map of public toilets in Cluj-Napoca"></div>
             <div class="map-controls" aria-label="Map zoom controls">
@@ -77,7 +89,11 @@
         </div>
 
         <p class="dialog-copy">
-          Tap the map to prefill coordinates, or type them manually.
+          Pick a point on the map or edit the coordinates manually before saving.
+        </p>
+
+        <p id="dialog-selection-hint" class="dialog-selection-hint">
+          No map point selected yet. The current map center will be used.
         </p>
 
         <label for="toilet-name">Label</label>
