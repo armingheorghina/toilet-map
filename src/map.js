@@ -35,7 +35,7 @@ function formatUrl(urlObject, accessToken) {
   const apiUrlObject = parseUrl("https://api.mapbox.com");
   urlObject.protocol = apiUrlObject.protocol;
   urlObject.authority = apiUrlObject.authority;
-  urlObject.params.push(`access_token=${accessToken}`);
+  urlObject.params.push(`access_token=${encodeURIComponent(accessToken)}`);
   const params = urlObject.params.length ? `?${urlObject.params.join("&")}` : "";
   return `${urlObject.protocol}://${urlObject.authority}${urlObject.path}${params}`;
 }

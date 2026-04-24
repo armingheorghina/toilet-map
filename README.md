@@ -42,7 +42,19 @@ The workflow in `.github/workflows/deploy-pages.yml` publishes the **repository 
 
 Add repository secret **`MAPBOX_ACCESS_TOKEN`** (same value as in your local `mapbox-config.js`). The workflow writes `src/mapbox-config.js` into the deploy artifact only; the token is not stored in git history.
 
+Use a **default public** token (`pk.`…) in the secret and locally, not a secret (`sk.`…) token.
+
 After deploy, verify that `index.html` loads and that requests to `./src/...` return 200 (same layout as local).
+
+### Basemap: 401, “Failed to fetch”, or CORS on `api.mapbox.com`
+
+Browsers often show **CORS blocked** when Mapbox returns **401** (many 401 responses omit `Access-Control-Allow-Origin`, so the console blames CORS).
+
+1. **URL restrictions** — In [Mapbox access tokens](https://account.mapbox.com/access-tokens/), edit the token and allow every site origin you use, for example:
+   - `http://localhost:8000/*`
+   - `https://armingheorghina.github.io/*` (covers `https://armingheorghina.github.io/toilet-map/` as well)
+2. **Secret** — In GitHub **Settings → Secrets and variables → Actions**, the value must be the raw token only (no spaces or wrapping quotes). Re-save `MAPBOX_ACCESS_TOKEN` after fixing; the deploy workflow trims whitespace and strips one pair of surrounding quotes.
+3. **Scopes** — Keep **styles:read** (and defaults for vector tiles/fonts) on that token.
 
 ## Configuration
 

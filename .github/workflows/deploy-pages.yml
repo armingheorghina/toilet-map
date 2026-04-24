@@ -37,7 +37,15 @@ jobs:
           fi
           node <<'NODE'
           const fs = require("fs");
-          const token = process.env.MAPBOX_ACCESS_TOKEN;
+          let token = process.env.MAPBOX_ACCESS_TOKEN || "";
+          token = token.replace(/\r\n/g, "\n").trim();
+          if ((token.startsWith('"') && token.endsWith('"')) || (token.startsWith("'") && token.endsWith("'"))) {
+            token = token.slice(1, -1).trim();
+          }
+          if (!token) {
+            console.error("MAPBOX_ACCESS_TOKEN is empty after trim");
+            process.exit(1);
+          }
           const body =
             "/**\n * Generated in CI from MAPBOX_ACCESS_TOKEN — do not commit.\n */\n" +
             `export const MAPBOX_ACCESS_TOKEN = ${JSON.stringify(token)};\n`;
