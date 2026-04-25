@@ -116,7 +116,7 @@ button {
   min-height: 420px;
   border-radius: 20px;
   overflow: hidden;
-  font-family: "Shampoos", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #map * {
