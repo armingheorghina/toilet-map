@@ -104,17 +104,34 @@ function popupActionsHtml(mapsHref) {
 
 function createPopupContent(toilet) {
   const fee = feeLabelAndClass(toilet);
+  if (String(toilet.fee ?? "").trim().toLowerCase() === "customer") {
+    fee.text = "Customer";
+    fee.className = "popup-fee-tag--paid";
+  }
+  const hasWheelchair = String(toilet.wheelchair ?? "").trim().toLowerCase() === "yes";
+  const hasHandwashing = String(toilet.handwashing ?? "").trim().toLowerCase() === "yes";
   const mapsHref = googleMapsUrl(toilet);
   const idAttr = encodeURIComponent(toilet.id);
 
   return `
     <article class="popup-card popup-card--compact" data-toilet-id="${idAttr}">
-      <h3 class="popup-card__title">${escapeHtml(toilet.name)}</h3>
+      <h3 class="popup-card__title">
+        ${escapeHtml(toilet.name)}
+        ${hasWheelchair ? '<span class="popup-inline-emoji" aria-label="Wheelchair accessible">♿</span>' : ""}
+      </h3>
       <dl class="popup-card__rows">
         <div class="popup-card__row">
           <dt>Fee</dt>
           <dd><span class="popup-fee-tag ${fee.className}">${escapeHtml(fee.text)}</span></dd>
         </div>
+        ${
+          hasHandwashing
+            ? `<div class="popup-card__row">
+          <dt>Handwash</dt>
+          <dd><span class="popup-fee-tag popup-fee-tag--handwash">✅</span></dd>
+        </div>`
+            : ""
+        }
       </dl>
       ${reviewsSectionHtml()}
       ${popupActionsHtml(mapsHref)}

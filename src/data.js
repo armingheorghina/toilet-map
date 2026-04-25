@@ -62,6 +62,7 @@ function normalizeToilet(item) {
     fee: item.fee ?? null,
     charge: item.charge ?? null,
     wheelchair: item.wheelchair ?? null,
+    handwashing: item.handwashing ?? item.toiletsHandwashing ?? null,
     openingHours: item.openingHours ?? item.opening_hours ?? null,
     notes: item.notes ?? null
   };
@@ -85,6 +86,7 @@ function normalizeOverpassElement(element) {
     fee: element.tags?.fee ?? null,
     charge: element.tags?.charge ?? null,
     wheelchair: element.tags?.wheelchair ?? null,
+    toiletsHandwashing: element.tags?.["toilets:handwashing"] ?? null,
     opening_hours: element.tags?.opening_hours ?? null,
     notes: element.tags?.description ?? null
   });
