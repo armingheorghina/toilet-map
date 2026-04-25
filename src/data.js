@@ -7,7 +7,7 @@ export const CLUJ_CENTER = {
 
 const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 const FALLBACK_DATA_URL = "./src/fallback-toilets.json";
-const CACHE_KEY = "cluj-public-toilets-cache-v2";
+const CACHE_KEY = "cluj-public-toilets-cache-v3";
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 
 // --- Cache (OSM snapshot, separate from user custom toilets in storage.js) ---
