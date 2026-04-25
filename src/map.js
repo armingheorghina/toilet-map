@@ -2,6 +2,12 @@ import { MAPTILER_API_KEY } from "./maptiler-config.js";
 import { addReview, getDefaultStarDisplay } from "./reviews.js";
 
 const TOILET_ICON_URL = "./src/toilet.png";
+const CLUJ_COUNTY_BOUNDS = [
+  [22.55, 46.24], // southwest [lng, lat]
+  [24.25, 47.15] // northeast [lng, lat]
+];
+const MIN_ZOOM = 10;
+const MAX_ZOOM = 18;
 
 function escapeHtml(value) {
   return String(value)
@@ -221,6 +227,9 @@ export function createMap({ containerId, center }) {
     style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${encodeURIComponent(mapTilerKey)}`,
     center: [center.lng, center.lat],
     zoom: center.zoom,
+    minZoom: MIN_ZOOM,
+    maxZoom: MAX_ZOOM,
+    maxBounds: CLUJ_COUNTY_BOUNDS,
     attributionControl: false
   });
 

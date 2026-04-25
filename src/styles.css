@@ -72,6 +72,13 @@ button {
   line-height: 1;
 }
 
+.subhead {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 .page {
   display: grid;
   gap: 1rem;
@@ -88,34 +95,6 @@ button {
 
 .hero-card {
   padding: 1rem;
-}
-
-.hero-text {
-  margin: 0 0 0.75rem;
-  font-size: 0.98rem;
-  color: var(--muted);
-}
-
-.map-helper {
-  margin-bottom: 0.75rem;
-  padding: 0.9rem 1rem;
-  border-radius: 18px;
-  border: 1px solid var(--border);
-  background:
-    linear-gradient(135deg, rgba(17, 32, 52, 0.92), rgba(13, 24, 39, 0.84));
-}
-
-.map-helper-title {
-  margin: 0 0 0.3rem;
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-}
-
-.map-helper-copy {
-  margin: 0;
-  color: var(--text);
 }
 
 .legend {
@@ -221,20 +200,6 @@ details[open] > .add-toilet-summary::after {
 
 .map-card {
   padding: 0.75rem;
-}
-
-.status-row {
-  margin-bottom: 0.75rem;
-}
-
-.status-message {
-  margin: 0;
-  min-height: 1.5rem;
-  color: var(--muted);
-}
-
-.status-message[data-state="error"] {
-  color: var(--danger);
 }
 
 .map-frame {
@@ -355,33 +320,30 @@ details[open] > .add-toilet-summary::after {
   z-index: 2000;
   right: 0.75rem;
   bottom: 0.75rem;
-  max-width: 11.5rem;
-  padding: 0.65rem 0.75rem;
+  padding: 0.45rem;
   border-radius: 16px;
   background: var(--surface);
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
-  text-align: center;
-}
-
-.support-footer-text {
-  margin: 0 0 0.45rem;
-  font-size: 0.7rem;
-  line-height: 1.35;
-  color: var(--muted);
 }
 
 .support-footer-link {
   display: inline-block;
   line-height: 0;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.support-footer-link img {
+.kofi-badge {
+  display: inline-block;
+  width: 140px;
+}
+
+.kofi-badge-svg {
+  display: block;
   width: 100%;
-  max-width: 140px;
   height: auto;
-  border-radius: 8px;
 }
 
 /* MapLibre GL JS toilet popups — compact card */
@@ -414,16 +376,18 @@ details[open] > .add-toilet-summary::after {
 #map .maplibregl-ctrl-attrib,
 #map .maplibregl-ctrl-attrib-inner,
 #map .maplibregl-ctrl-attrib a {
-  font-size: 9px !important;
-  line-height: 1.25 !important;
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
 }
 
 #map .maplibregl-ctrl-attrib.maplibregl-compact {
-  max-width: min(42vw, 160px);
+  max-width: min(80vw, 420px);
+  border-radius: 8px;
 }
 
 #map .maplibregl-ctrl-attrib.maplibregl-compact .maplibregl-ctrl-attrib-inner {
-  max-width: min(40vw, 150px);
+  max-width: min(75vw, 390px);
   padding: 2px 5px !important;
 }
 

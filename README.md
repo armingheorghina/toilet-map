@@ -26,6 +26,14 @@ python -m http.server 8000
 
 Then open `http://localhost:8000`.
 
+### Quick checks
+
+Run the project smoke checks:
+
+```bash
+node tests/smoke-check.mjs
+```
+
 ### MapTiler key (local)
 
 `src/maptiler-config.js` is **gitignored** so your public API key is not committed. One-time setup:

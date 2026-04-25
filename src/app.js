@@ -1,9 +1,7 @@
 import { getToilets, CLUJ_CENTER } from "./data.js";
 import { createMap, renderToilets } from "./map.js";
 import { loadCustomToilets, saveCustomToilets, createCustomToilet } from "./storage.js";
-import { BUY_ME_A_COFFEE_USERNAME } from "./site-config.js";
-
-const statusMessage = document.querySelector("#status-message");
+import { KOFI_URL } from "./site-config.js";
 
 let map;
 try {
@@ -13,15 +11,10 @@ try {
   });
 } catch (error) {
   console.error(error);
-  if (statusMessage) {
-    statusMessage.textContent = "The map could not start (MapLibre GL JS failed to load).";
-    statusMessage.dataset.state = "error";
-  }
   map = undefined;
 }
 const zoomInButton = document.querySelector("#zoom-in-button");
 const zoomOutButton = document.querySelector("#zoom-out-button");
-const selectionCoordinates = document.querySelector("#selection-coordinates");
 const addToiletForm = document.querySelector("#add-toilet-form");
 const pickLocationButton = document.querySelector("#pick-location-button");
 const useMapCenterButton = document.querySelector("#use-map-center-button");
@@ -37,11 +30,6 @@ function toiletsForMap() {
   return [...osmToilets, ...customToilets];
 }
 
-function updateStatus(message, isError = false) {
-  statusMessage.textContent = message;
-  statusMessage.dataset.state = isError ? "error" : "normal";
-}
-
 function refreshMarkers() {
   if (!map) {
     return;
@@ -52,17 +40,6 @@ function refreshMarkers() {
   markerLayer = renderToilets(map, toiletsForMap());
 }
 
-function formatLatLng(latlng) {
-  return `${latlng.lat.toFixed(6)}, ${latlng.lng.toFixed(6)}`;
-}
-
-function updateCenterSummary() {
-  if (!map) {
-    return;
-  }
-  selectionCoordinates.textContent = `Map center: ${formatLatLng(map.getCenter())}`;
-}
-
 function setPlacementMode(active) {
   placementMode = active;
   pickLocationButton.dataset.active = active ? "true" : "false";
@@ -71,11 +48,11 @@ function setPlacementMode(active) {
 }
 
 function initSupportFooter() {
-  const slug = BUY_ME_A_COFFEE_USERNAME?.trim();
-  if (!supportFooter || !supportLink || !slug) {
+  const kofiUrl = KOFI_URL?.trim();
+  if (!supportFooter || !supportLink || !kofiUrl) {
     return;
   }
-  supportLink.href = `https://buymeacoffee.com/${encodeURIComponent(slug)}`;
+  supportLink.href = kofiUrl;
   supportFooter.hidden = false;
 }
 
@@ -106,7 +83,6 @@ function handleAddToiletSubmit(event) {
   refreshMarkers();
   form.reset();
   setPlacementMode(false);
-  updateStatus(`Saved your toilet. ${toiletsForMap().length} markers on the map.`, false);
 }
 
 function handleMapClickForPlacement(event) {
@@ -124,23 +100,24 @@ async function loadOsmToilets() {
     const result = await getToilets();
     osmToilets = result.toilets;
     refreshMarkers();
-    updateStatus(result.message, result.usedFallback);
   } catch (error) {
     console.error(error);
     osmToilets = [];
     refreshMarkers();
-    updateStatus("The map loaded, but toilet data could not be loaded right now.", true);
   }
 }
 
 initSupportFooter();
 
 if (map) {
-  map.on("moveend", updateCenterSummary);
   map.on("click", handleMapClickForPlacement);
 
-  zoomInButton.addEventListener("click", () => map.zoomIn());
-  zoomOutButton.addEventListener("click", () => map.zoomOut());
+  zoomInButton.addEventListener("click", () =>
+    map.easeTo({ zoom: map.getZoom() + 1, duration: 240, easing: (t) => 1 - (1 - t) * (1 - t) })
+  );
+  zoomOutButton.addEventListener("click", () =>
+    map.easeTo({ zoom: map.getZoom() - 1, duration: 240, easing: (t) => 1 - (1 - t) * (1 - t) })
+  );
 
   pickLocationButton.addEventListener("click", () => {
     setPlacementMode(!placementMode);
@@ -155,7 +132,6 @@ if (map) {
 
   addToiletForm.addEventListener("submit", handleAddToiletSubmit);
 
-  updateCenterSummary();
   loadOsmToilets();
 } else {
   addToiletForm.addEventListener("submit", handleAddToiletSubmit);

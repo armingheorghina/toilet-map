@@ -1,5 +1,5 @@
 /**
  * Per-deploy settings. Safe to commit; replace values for your fork.
- * Buy Me a Coffee profile slug only (the path segment after buymeacoffee.com/).
+ * Ko-fi donation URL for the floating support button.
  */
-export const BUY_ME_A_COFFEE_USERNAME = "";
+export const KOFI_URL = "https://ko-fi.com/arming";

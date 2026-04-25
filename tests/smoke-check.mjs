@@ -1,0 +1,41 @@
+import fs from "node:fs";
+import path from "node:path";
+import assert from "node:assert/strict";
+
+const root = process.cwd();
+
+function read(relPath) {
+  return fs.readFileSync(path.join(root, relPath), "utf8");
+}
+
+function run() {
+  const html = read("index.html");
+  const app = read("src/app.js");
+  const map = read("src/map.js");
+  const styles = read("src/styles.css");
+  const siteConfig = read("src/site-config.js");
+
+  assert.match(html, /Când te scapa, te scapă!/);
+  assert.doesNotMatch(html, /Browse public toilets from OpenStreetMap/i);
+  assert.doesNotMatch(html, /Loading map data/i);
+  assert.doesNotMatch(html, /Map guide/i);
+  assert.match(html, /kofi-badge-svg/);
+
+  assert.match(siteConfig, /KOFI_URL/);
+  assert.match(siteConfig, /https:\/\/ko-fi\.com\/arming/);
+
+  assert.match(app, /map\.easeTo\(/);
+  assert.doesNotMatch(app, /status-message/);
+  assert.doesNotMatch(app, /selection-coordinates/);
+
+  assert.match(map, /maxBounds:\s*CLUJ_COUNTY_BOUNDS/);
+  assert.match(map, /minZoom:\s*MIN_ZOOM/);
+  assert.match(map, /maxZoom:\s*MAX_ZOOM/);
+
+  assert.match(styles, /maplibregl-ctrl-attrib-inner/);
+  assert.match(styles, /white-space:\s*nowrap/i);
+
+  console.log("Smoke checks passed.");
+}
+
+run();
