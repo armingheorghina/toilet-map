@@ -14,7 +14,7 @@ try {
 } catch (error) {
   console.error(error);
   if (statusMessage) {
-    statusMessage.textContent = "The map could not start (MapLibre failed to load).";
+    statusMessage.textContent = "The map could not start (Mapbox GL JS failed to load).";
     statusMessage.dataset.state = "error";
   }
   map = undefined;

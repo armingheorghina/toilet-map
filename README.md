@@ -1,6 +1,6 @@
 # Cluj public toilets map
 
-Mobile-first static site: a **MapLibre GL** map centered on **Cluj-Napoca, Romania**, public toilets from **OpenStreetMap** (Overpass API) with a **local fallback** if the network fails, plus **your own markers** stored in the browser.
+Mobile-first static site: a **Mapbox GL JS** map centered on **Cluj-Napoca, Romania**, public toilets from **OpenStreetMap** (Overpass API) with a **local fallback** if the network fails, plus **your own markers** stored in the browser.
 
 **Live site (GitHub Pages):** after you enable Pages for this repository, the app is usually available at:
 
@@ -10,7 +10,7 @@ Use the same URL in your browser as the “homepage” for the deployed project.
 
 ## What you get
 
-- **Mapbox Outdoors** vector style via **[MapLibre GL JS](https://maplibre.org/)** (MapLibre-compatible Mapbox style URL + token), with custom touch-friendly zoom buttons  
+- **Mapbox Outdoors** vector style via **[Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/)**, with custom touch-friendly zoom buttons  
 - Toilet markers from Overpass (`amenity=toilets` in the Cluj-Napoca admin area), with optional **12-hour local cache** of that response  
 - **Fallback JSON** in `src/fallback-toilets.json` when Overpass is down or blocked  
 - **Add your own toilets** (name, notes, coordinates) with **localStorage** persistence  

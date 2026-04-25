@@ -3,113 +3,6 @@ import { addReview, getDefaultStarDisplay } from "./reviews.js";
 
 const TOILET_ICON_URL = "./src/toilet.png";
 
-/**
- * Mapbox style JSON URL for MapLibre.
- * Use `/styles/v1/.../outdoors-v12?access_token=` — `/style.json` on this path returns 404.
- */
-function mapStyleUrl() {
-  const token = encodeURIComponent(MAPBOX_ACCESS_TOKEN?.trim() || "");
-  return `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12?access_token=${token}`;
-}
-
-/** MapLibre does not resolve `mapbox://` URLs; rewrite them like mapbox-gl does (MIT: rowanwins/maplibregl-mapbox-request-transformer). */
-function isMapboxURL(url) {
-  return url.startsWith("mapbox:");
-}
-
-function parseUrl(url) {
-  const urlRe = /^(\w+):\/\/([^/?]*)(\/[^?]+)?\??(.+)?/;
-  const parts = url.match(urlRe);
-  if (!parts) {
-    throw new Error("Unable to parse URL object");
-  }
-  return {
-    protocol: parts[1],
-    authority: parts[2],
-    path: parts[3] || "/",
-    params: parts[4] ? parts[4].split("&") : []
-  };
-}
-
-function formatUrl(urlObject, accessToken) {
-  const apiUrlObject = parseUrl("https://api.mapbox.com");
-  urlObject.protocol = apiUrlObject.protocol;
-  urlObject.authority = apiUrlObject.authority;
-  urlObject.params.push(`access_token=${encodeURIComponent(accessToken)}`);
-  const params = urlObject.params.length ? `?${urlObject.params.join("&")}` : "";
-  return `${urlObject.protocol}://${urlObject.authority}${urlObject.path}${params}`;
-}
-
-function normalizeStyleURL(url, accessToken) {
-  const urlObject = parseUrl(url);
-  urlObject.path = `/styles/v1${urlObject.path}`;
-  return formatUrl(urlObject, accessToken);
-}
-
-function normalizeGlyphsURL(url, accessToken) {
-  const urlObject = parseUrl(url);
-  urlObject.path = `/fonts/v1${urlObject.path}`;
-  return formatUrl(urlObject, accessToken);
-}
-
-function normalizeSourceURL(url, accessToken) {
-  const urlObject = parseUrl(url);
-  urlObject.path = `/v4/${urlObject.authority}.json`;
-  urlObject.params.push("secure");
-  return formatUrl(urlObject, accessToken);
-}
-
-function normalizeSpriteURL(url, accessToken) {
-  const urlObject = parseUrl(url);
-  const pathParts = urlObject.path.split(".");
-  let properPath = pathParts[0];
-  const extension = pathParts[1] || "json";
-  let format = "";
-  if (properPath.includes("@2x")) {
-    const [base] = properPath.split("@2x");
-    properPath = base;
-    format = "@2x";
-  }
-  urlObject.path = `/styles/v1${properPath}/sprite${format}.${extension}`;
-  return formatUrl(urlObject, accessToken);
-}
-
-function transformMapboxUrl(url, resourceType, accessToken) {
-  if (url.includes("/styles/") && !url.includes("/sprite")) {
-    return { url: normalizeStyleURL(url, accessToken) };
-  }
-  if (url.includes("/sprites/")) {
-    return { url: normalizeSpriteURL(url, accessToken) };
-  }
-  if (url.includes("/fonts/")) {
-    return { url: normalizeGlyphsURL(url, accessToken) };
-  }
-  if (url.includes("/v4/")) {
-    return { url: normalizeSourceURL(url, accessToken) };
-  }
-  if (resourceType === "Source") {
-    return { url: normalizeSourceURL(url, accessToken) };
-  }
-  return undefined;
-}
-
-function createMapboxTransformRequest(accessToken) {
-  const token = accessToken?.trim();
-  return (url, resourceType) => {
-    if (token && isMapboxURL(url)) {
-      const mapped = transformMapboxUrl(url, resourceType, token);
-      if (mapped?.url) {
-        return mapped;
-      }
-    }
-    if (token && url.startsWith("https://api.mapbox.com") && !url.includes("access_token=")) {
-      const sep = url.includes("?") ? "&" : "?";
-      return { url: `${url}${sep}access_token=${encodeURIComponent(token)}` };
-    }
-    return { url };
-  };
-}
-
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -288,7 +181,7 @@ function buildMarker(map, toilet) {
   el.setAttribute("aria-label", toilet.name);
   el.title = toilet.name;
 
-  const popup = new maplibregl.Popup({
+  const popup = new mapboxgl.Popup({
     offset: 20,
     maxWidth: "260px",
     className: "toilet-ml-popup",
@@ -305,15 +198,15 @@ function buildMarker(map, toilet) {
     popup._starsAbort?.abort();
   });
 
-  return new maplibregl.Marker({ element: el, anchor: "center" })
+  return new mapboxgl.Marker({ element: el, anchor: "center" })
     .setLngLat([toilet.lng, toilet.lat])
     .setPopup(popup)
     .addTo(map);
 }
 
 export function createMap({ containerId, center }) {
-  if (typeof maplibregl === "undefined") {
-    throw new Error("MapLibre GL failed to load. Check the maplibre-gl script in index.html.");
+  if (typeof mapboxgl === "undefined") {
+    throw new Error("Mapbox GL JS failed to load. Check the mapbox-gl script in index.html.");
   }
 
   if (!MAPBOX_ACCESS_TOKEN?.trim()) {
@@ -322,19 +215,17 @@ export function createMap({ containerId, center }) {
     );
   }
 
-  const token = MAPBOX_ACCESS_TOKEN?.trim() || "";
+  mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN?.trim() || "";
 
-  const map = new maplibregl.Map({
+  const map = new mapboxgl.Map({
     container: containerId,
-    style: mapStyleUrl(),
+    style: "mapbox://styles/mapbox/outdoors-v12",
     center: [center.lng, center.lat],
     zoom: center.zoom,
-    attributionControl: false,
-    transformRequest: createMapboxTransformRequest(token),
-    validateStyle: false
+    attributionControl: false
   });
 
-  map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
+  map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-left");
 
   return map;
 }
