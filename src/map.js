@@ -8,6 +8,7 @@ const CLUJ_COUNTY_BOUNDS = [
 ];
 const MIN_ZOOM = 10;
 const MAX_ZOOM = 18;
+const MAX_PITCH = 60;
 
 function escapeHtml(value) {
   return String(value)
@@ -229,6 +230,7 @@ export function createMap({ containerId, center }) {
     zoom: center.zoom,
     minZoom: MIN_ZOOM,
     maxZoom: MAX_ZOOM,
+    maxPitch: MAX_PITCH,
     maxBounds: CLUJ_COUNTY_BOUNDS,
     attributionControl: false
   });

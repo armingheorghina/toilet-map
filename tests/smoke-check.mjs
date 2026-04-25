@@ -16,24 +16,34 @@ function run() {
   const siteConfig = read("src/site-config.js");
 
   assert.match(html, /Când te scapa, te scapă!/);
+  assert.doesNotMatch(html, /Your saved toilets/i);
   assert.doesNotMatch(html, /Browse public toilets from OpenStreetMap/i);
   assert.doesNotMatch(html, /Loading map data/i);
   assert.doesNotMatch(html, /Map guide/i);
   assert.match(html, /kofi-badge-svg/);
+  assert.match(html, /Donate a/);
+  assert.match(html, /toilet roll/);
+  assert.match(html, /id="locate-me-button"/);
+  assert.match(html, /id="tilt-toggle-button"/);
 
   assert.match(siteConfig, /KOFI_URL/);
   assert.match(siteConfig, /https:\/\/ko-fi\.com\/arming/);
 
   assert.match(app, /map\.easeTo\(/);
+  assert.match(app, /navigator\.geolocation/);
+  assert.match(app, /map\.getPitch\(\)/);
   assert.doesNotMatch(app, /status-message/);
   assert.doesNotMatch(app, /selection-coordinates/);
+  assert.doesNotMatch(app, /updateStatus\(/);
 
   assert.match(map, /maxBounds:\s*CLUJ_COUNTY_BOUNDS/);
   assert.match(map, /minZoom:\s*MIN_ZOOM/);
   assert.match(map, /maxZoom:\s*MAX_ZOOM/);
+  assert.match(map, /maxPitch:\s*MAX_PITCH/);
 
   assert.match(styles, /maplibregl-ctrl-attrib-inner/);
   assert.match(styles, /white-space:\s*nowrap/i);
+  assert.match(styles, /maplibregl-ctrl-attrib-button::before/);
 
   console.log("Smoke checks passed.");
 }

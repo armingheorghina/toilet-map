@@ -24,13 +24,6 @@
 
       <main class="page">
         <section class="hero-card">
-          <div class="legend" aria-label="Marker legend">
-            <span class="legend-item">
-              <span class="legend-dot legend-dot-custom"></span>
-              Your saved toilets
-            </span>
-          </div>
-
           <details class="add-toilet-panel">
             <summary class="add-toilet-summary">Add a toilet</summary>
             <form id="add-toilet-form" class="add-toilet-form">
@@ -71,6 +64,14 @@
               <button id="zoom-in-button" class="map-control-button" type="button" aria-label="Zoom in">
                 +
               </button>
+              <button id="locate-me-button" class="map-control-button map-control-button--icon" type="button" aria-label="Locate me">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 4.93 7 13 7 13s7-8.07 7-13a7 7 0 0 0-7-7Zm0 10a3 3 0 1 1 0-6a3 3 0 0 1 0 6Z"/>
+                </svg>
+              </button>
+              <button id="tilt-toggle-button" class="map-control-button map-control-button--mode" type="button" aria-label="Toggle 2D or 3D view">
+                2D
+              </button>
               <button id="zoom-out-button" class="map-control-button" type="button" aria-label="Zoom out">
                 -
               </button>
@@ -94,8 +95,8 @@
             <rect x="0" y="0" width="300" height="110" rx="20" fill="#29ABE0"></rect>
             <rect x="18" y="20" width="66" height="66" rx="12" fill="#FFFFFF"></rect>
             <path d="M34 44h34c6.2 0 11.2 5 11.2 11.2S74.2 66.4 68 66.4h-2.9l-6.1 9.6a9.6 9.6 0 0 1-16.2 0L32.7 60.2A10.5 10.5 0 0 1 41.5 44Z" fill="#FF5E5B"></path>
-            <text x="98" y="53" fill="#FFFFFF" font-size="26" font-family="Arial, sans-serif" font-weight="700">Support me</text>
-            <text x="98" y="82" fill="#FFFFFF" font-size="22" font-family="Arial, sans-serif">on Ko-fi</text>
+            <text x="98" y="53" fill="#FFFFFF" font-size="22" font-family="Arial, sans-serif" font-weight="700">Donate a</text>
+            <text x="98" y="82" fill="#FFFFFF" font-size="22" font-family="Arial, sans-serif">toilet roll</text>
           </svg>
         </span>
       </a>
