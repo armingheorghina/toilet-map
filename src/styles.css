@@ -29,7 +29,7 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  font-family: "Shampoos", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   color: var(--text);
   background:
     radial-gradient(circle at top left, rgba(32, 201, 151, 0.18), transparent 26%),
@@ -116,6 +116,11 @@ button {
   min-height: 420px;
   border-radius: 20px;
   overflow: hidden;
+  font-family: "Shampoos", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#map * {
+  font-family: inherit;
 }
 
 .map-controls {
