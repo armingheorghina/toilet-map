@@ -45,7 +45,7 @@ button {
 }
 
 .app-shell {
-  width: min(100%, 960px);
+  width: min(100%, 1120px);
   margin: 0 auto;
   padding: 1rem;
 }
@@ -84,93 +84,12 @@ button {
   gap: 1rem;
 }
 
-.hero-card,
 .map-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 24px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
-}
-
-.hero-card {
-  padding: 1rem;
-}
-
-.add-toilet-panel {
-  border-radius: 18px;
-  border: 1px solid var(--border);
-  background: rgba(9, 17, 29, 0.45);
-  overflow: hidden;
-}
-
-.add-toilet-summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 0.85rem 1rem;
-  font-weight: 600;
-  color: var(--accent);
-}
-
-.add-toilet-summary::-webkit-details-marker {
-  display: none;
-}
-
-.add-toilet-summary::after {
-  content: "▸";
-  float: right;
-  opacity: 0.65;
-  transition: transform 0.15s ease;
-}
-
-details[open] > .add-toilet-summary::after {
-  transform: rotate(90deg);
-}
-
-.add-toilet-form {
-  padding: 0 1rem 1rem;
-  display: grid;
-  gap: 0.75rem;
-}
-
-.add-toilet-hint {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.4;
-}
-
-.field {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.field-label {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.field input,
-.field textarea {
-  width: 100%;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: rgba(9, 17, 29, 0.55);
-  color: var(--text);
-  padding: 0.55rem 0.65rem;
-}
-
-.coords-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.65rem;
-}
-
-.add-toilet-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
 }
 
 .map-card {
@@ -270,6 +189,15 @@ details[open] > .add-toilet-summary::after {
   letter-spacing: 0.02em;
 }
 
+.user-location-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  background: #1a73e8;
+  box-shadow: 0 0 0 5px rgba(26, 115, 232, 0.25);
+}
+
 .toilet-marker-hit {
   display: block;
   padding: 0;
@@ -355,8 +283,8 @@ details[open] > .add-toilet-summary::after {
 
 /* MapLibre attribution: small text, bottom-left, limited width so it stays clear of custom zoom (bottom-right) */
 #map .maplibregl-ctrl-bottom-left {
-  margin-left: 0.35rem;
-  margin-bottom: 0.35rem;
+  margin-left: 0.45rem;
+  margin-bottom: 0.45rem;
   z-index: 1;
 }
 
@@ -375,11 +303,16 @@ details[open] > .add-toilet-summary::after {
 #map .maplibregl-ctrl-attrib.maplibregl-compact {
   max-width: min(80vw, 420px);
   border-radius: 8px;
+  margin: 0 !important;
 }
 
 #map .maplibregl-ctrl-attrib.maplibregl-compact .maplibregl-ctrl-attrib-inner {
   max-width: min(75vw, 390px);
   padding: 2px 5px !important;
+}
+
+#map .maplibregl-ctrl-attrib:not(.maplibregl-compact) {
+  margin: 0 !important;
 }
 
 #map .maplibregl-ctrl-attrib-button {
@@ -594,6 +527,7 @@ details[open] > .add-toilet-summary::after {
 
 @media (max-width: 720px) {
   .app-shell {
+    width: min(100%, 980px);
     padding: 0.8rem;
   }
 

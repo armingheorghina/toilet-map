@@ -25,6 +25,9 @@ function run() {
   assert.match(html, /toilet roll/);
   assert.match(html, /id="locate-me-button"/);
   assert.match(html, /id="tilt-toggle-button"/);
+  assert.match(html, /toilet roll 🧻/);
+  assert.doesNotMatch(html, /add-toilet-summary/);
+  assert.doesNotMatch(html, /hero-card/);
 
   assert.match(siteConfig, /KOFI_URL/);
   assert.match(siteConfig, /https:\/\/ko-fi\.com\/arming/);
@@ -32,6 +35,7 @@ function run() {
   assert.match(app, /map\.easeTo\(/);
   assert.match(app, /navigator\.geolocation/);
   assert.match(app, /map\.getPitch\(\)/);
+  assert.match(app, /setUserLocationMarker/);
   assert.doesNotMatch(app, /status-message/);
   assert.doesNotMatch(app, /selection-coordinates/);
   assert.doesNotMatch(app, /updateStatus\(/);
@@ -44,6 +48,7 @@ function run() {
   assert.match(styles, /maplibregl-ctrl-attrib-inner/);
   assert.match(styles, /white-space:\s*nowrap/i);
   assert.match(styles, /maplibregl-ctrl-attrib-button::before/);
+  assert.match(styles, /user-location-dot/);
 
   console.log("Smoke checks passed.");
 }

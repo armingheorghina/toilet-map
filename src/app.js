@@ -1,6 +1,5 @@
 import { getToilets, CLUJ_CENTER } from "./data.js";
 import { createMap, renderToilets } from "./map.js";
-import { loadCustomToilets, saveCustomToilets, createCustomToilet } from "./storage.js";
 import { KOFI_URL } from "./site-config.js";
 
 let map;
@@ -17,19 +16,15 @@ const zoomInButton = document.querySelector("#zoom-in-button");
 const zoomOutButton = document.querySelector("#zoom-out-button");
 const locateMeButton = document.querySelector("#locate-me-button");
 const tiltToggleButton = document.querySelector("#tilt-toggle-button");
-const addToiletForm = document.querySelector("#add-toilet-form");
-const pickLocationButton = document.querySelector("#pick-location-button");
-const useMapCenterButton = document.querySelector("#use-map-center-button");
 const supportFooter = document.querySelector("#support-footer");
 const supportLink = document.querySelector("#support-footer-link");
 
 let osmToilets = [];
-let customToilets = loadCustomToilets();
 let markerLayer = null;
-let placementMode = false;
+let userLocationMarker = null;
 
 function toiletsForMap() {
-  return [...osmToilets, ...customToilets];
+  return [...osmToilets];
 }
 
 function refreshMarkers() {
@@ -42,13 +37,6 @@ function refreshMarkers() {
   markerLayer = renderToilets(map, toiletsForMap());
 }
 
-function setPlacementMode(active) {
-  placementMode = active;
-  pickLocationButton.dataset.active = active ? "true" : "false";
-  pickLocationButton.textContent = active ? "Tap the map to set location…" : "Pick on map";
-  map?.getCanvasContainer().classList.toggle("map--placing", active);
-}
-
 function initSupportFooter() {
   const kofiUrl = KOFI_URL?.trim();
   if (!supportFooter || !supportLink || !kofiUrl) {
@@ -58,43 +46,16 @@ function initSupportFooter() {
   supportFooter.hidden = false;
 }
 
-function readFormLatLng() {
-  const lat = Number(addToiletForm.querySelector('[name="lat"]').value);
-  const lng = Number(addToiletForm.querySelector('[name="lng"]').value);
-  return { lat, lng };
-}
-
-function handleAddToiletSubmit(event) {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const name = form.querySelector('[name="name"]').value;
-  const notes = form.querySelector('[name="notes"]').value;
-  const { lat, lng } = readFormLatLng();
-
-  if (!name.trim()) {
-    form.querySelector('[name="name"]').focus();
+function setUserLocationMarker({ lat, lng }) {
+  if (!map) {
     return;
   }
-  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-    form.querySelector('[name="lat"]').focus();
-    return;
+  if (!userLocationMarker) {
+    const dot = document.createElement("span");
+    dot.className = "user-location-dot";
+    userLocationMarker = new maplibregl.Marker({ element: dot, anchor: "center" });
   }
-
-  customToilets = [...customToilets, createCustomToilet({ name, notes, lat, lng })];
-  saveCustomToilets(customToilets);
-  refreshMarkers();
-  form.reset();
-  setPlacementMode(false);
-}
-
-function handleMapClickForPlacement(event) {
-  if (!placementMode) {
-    return;
-  }
-  const { lat, lng } = event.lngLat;
-  addToiletForm.querySelector('[name="lat"]').value = lat.toFixed(6);
-  addToiletForm.querySelector('[name="lng"]').value = lng.toFixed(6);
-  setPlacementMode(false);
+  userLocationMarker.setLngLat([lng, lat]).addTo(map);
 }
 
 async function loadOsmToilets() {
@@ -119,7 +80,6 @@ function updateTiltToggleLabel() {
 }
 
 if (map) {
-  map.on("click", handleMapClickForPlacement);
   map.on("pitchend", updateTiltToggleLabel);
 
   zoomInButton.addEventListener("click", () =>
@@ -134,9 +94,12 @@ if (map) {
     }
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        setUserLocationMarker({ lat, lng });
         map.easeTo({
-          center: [position.coords.longitude, position.coords.latitude],
-          zoom: Math.max(map.getZoom(), 15),
+          center: [lng, lat],
+          zoom: Math.max(map.getZoom(), 16),
           duration: 500
         });
       },
@@ -149,21 +112,6 @@ if (map) {
     map.easeTo({ pitch: nextPitch, duration: 320 });
   });
 
-  pickLocationButton.addEventListener("click", () => {
-    setPlacementMode(!placementMode);
-  });
-
-  useMapCenterButton.addEventListener("click", () => {
-    const c = map.getCenter();
-    addToiletForm.querySelector('[name="lat"]').value = c.lat.toFixed(6);
-    addToiletForm.querySelector('[name="lng"]').value = c.lng.toFixed(6);
-    setPlacementMode(false);
-  });
-
-  addToiletForm.addEventListener("submit", handleAddToiletSubmit);
-
   updateTiltToggleLabel();
   loadOsmToilets();
-} else {
-  addToiletForm.addEventListener("submit", handleAddToiletSubmit);
 }
