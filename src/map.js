@@ -181,7 +181,7 @@ function buildMarker(map, toilet) {
   el.setAttribute("aria-label", toilet.name);
   el.title = toilet.name;
 
-  const popup = new mapboxgl.Popup({
+  const popup = new maplibregl.Popup({
     offset: 20,
     maxWidth: "260px",
     className: "toilet-ml-popup",
@@ -198,15 +198,15 @@ function buildMarker(map, toilet) {
     popup._starsAbort?.abort();
   });
 
-  return new mapboxgl.Marker({ element: el, anchor: "center" })
+  return new maplibregl.Marker({ element: el, anchor: "center" })
     .setLngLat([toilet.lng, toilet.lat])
     .setPopup(popup)
     .addTo(map);
 }
 
 export function createMap({ containerId, center }) {
-  if (typeof mapboxgl === "undefined") {
-    throw new Error("Mapbox GL JS failed to load. Check the mapbox-gl script in index.html.");
+  if (typeof maplibregl === "undefined") {
+    throw new Error("MapLibre GL JS failed to load. Check the maplibre-gl script in index.html.");
   }
 
   const mapTilerKey = MAPTILER_API_KEY?.trim() || "";
@@ -216,7 +216,7 @@ export function createMap({ containerId, center }) {
     );
   }
 
-  const map = new mapboxgl.Map({
+  const map = new maplibregl.Map({
     container: containerId,
     style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${encodeURIComponent(mapTilerKey)}`,
     center: [center.lng, center.lat],
@@ -224,7 +224,7 @@ export function createMap({ containerId, center }) {
     attributionControl: false
   });
 
-  map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-left");
+  map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
 
   return map;
 }

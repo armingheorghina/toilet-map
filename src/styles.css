@@ -346,7 +346,7 @@ details[open] > .add-toilet-summary::after {
   filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.9));
 }
 
-.mapboxgl-canvas-container.map--placing {
+.maplibregl-canvas-container.map--placing {
   cursor: crosshair;
 }
 
@@ -384,8 +384,8 @@ details[open] > .add-toilet-summary::after {
   border-radius: 8px;
 }
 
-/* Mapbox GL JS toilet popups — compact card */
-.toilet-ml-popup .mapboxgl-popup-content {
+/* MapLibre GL JS toilet popups — compact card */
+.toilet-ml-popup .maplibregl-popup-content {
   margin: 0;
   min-width: 0;
   max-width: min(236px, calc(100vw - 3rem));
@@ -396,38 +396,38 @@ details[open] > .add-toilet-summary::after {
   box-shadow: 0 6px 18px rgba(18, 24, 38, 0.2);
 }
 
-.toilet-ml-popup .mapboxgl-popup-tip {
+.toilet-ml-popup .maplibregl-popup-tip {
   border-top-color: #eef1f4;
 }
 
-/* Mapbox attribution: small text, bottom-left, limited width so it stays clear of custom zoom (bottom-right) */
-#map .mapboxgl-ctrl-bottom-left {
+/* MapLibre attribution: small text, bottom-left, limited width so it stays clear of custom zoom (bottom-right) */
+#map .maplibregl-ctrl-bottom-left {
   margin-left: 0.35rem;
   margin-bottom: 0.35rem;
   z-index: 1;
 }
 
-#map .mapboxgl-ctrl-attrib.mapboxgl-compact {
+#map .maplibregl-ctrl-attrib.maplibregl-compact {
   min-height: auto;
 }
 
-#map .mapboxgl-ctrl-attrib,
-#map .mapboxgl-ctrl-attrib-inner,
-#map .mapboxgl-ctrl-attrib a {
+#map .maplibregl-ctrl-attrib,
+#map .maplibregl-ctrl-attrib-inner,
+#map .maplibregl-ctrl-attrib a {
   font-size: 9px !important;
   line-height: 1.25 !important;
 }
 
-#map .mapboxgl-ctrl-attrib.mapboxgl-compact {
+#map .maplibregl-ctrl-attrib.maplibregl-compact {
   max-width: min(42vw, 160px);
 }
 
-#map .mapboxgl-ctrl-attrib.mapboxgl-compact .mapboxgl-ctrl-attrib-inner {
+#map .maplibregl-ctrl-attrib.maplibregl-compact .maplibregl-ctrl-attrib-inner {
   max-width: min(40vw, 150px);
   padding: 2px 5px !important;
 }
 
-#map .mapboxgl-ctrl-attrib-button {
+#map .maplibregl-ctrl-attrib-button {
   width: 18px !important;
   height: 18px !important;
   top: 1px !important;
