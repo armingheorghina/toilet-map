@@ -1,2 +1,2 @@
-# Local Mapbox token (never commit). Copy from mapbox-config.example.js.
-src/mapbox-config.js
+# Local map keys (never commit). Copy from the example config files.
+src/maptiler-config.js

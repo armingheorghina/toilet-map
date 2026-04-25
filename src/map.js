@@ -1,4 +1,4 @@
-import { MAPBOX_ACCESS_TOKEN } from "./mapbox-config.js";
+import { MAPTILER_API_KEY } from "./maptiler-config.js";
 import { addReview, getDefaultStarDisplay } from "./reviews.js";
 
 const TOILET_ICON_URL = "./src/toilet.png";
@@ -209,17 +209,16 @@ export function createMap({ containerId, center }) {
     throw new Error("Mapbox GL JS failed to load. Check the mapbox-gl script in index.html.");
   }
 
-  if (!MAPBOX_ACCESS_TOKEN?.trim()) {
+  const mapTilerKey = MAPTILER_API_KEY?.trim() || "";
+  if (!mapTilerKey) {
     console.warn(
-      "Mapbox: missing MAPBOX_ACCESS_TOKEN. Copy src/mapbox-config.example.js to src/mapbox-config.js and add your token."
+      "MapTiler: missing MAPTILER_API_KEY. Copy src/maptiler-config.example.js to src/maptiler-config.js and add your key."
     );
   }
 
-  mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN?.trim() || "";
-
   const map = new mapboxgl.Map({
     container: containerId,
-    style: "mapbox://styles/mapbox/outdoors-v12",
+    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${encodeURIComponent(mapTilerKey)}`,
     center: [center.lng, center.lat],
     zoom: center.zoom,
     attributionControl: false
