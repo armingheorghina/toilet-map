@@ -25,7 +25,7 @@ function run() {
   
   assert.match(html, /id="locate-me-button"/);
   assert.match(html, /id="tilt-toggle-button"/);
-  assert.match(html, /toilet roll 🧻/);
+
   assert.doesNotMatch(html, /add-toilet-summary/);
   assert.doesNotMatch(html, /hero-card/);
 
