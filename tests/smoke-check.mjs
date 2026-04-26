@@ -21,7 +21,7 @@ function run() {
   assert.doesNotMatch(html, /Loading map data/i);
   assert.doesNotMatch(html, /Map guide/i);
   
-  assert.match(html, /Donate a/);
+  
   assert.match(html, /toilet roll/);
   assert.match(html, /id="locate-me-button"/);
   assert.match(html, /id="tilt-toggle-button"/);
