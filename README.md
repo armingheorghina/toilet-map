@@ -45,6 +45,22 @@ Optional environment variables:
 - `HOST` (default `127.0.0.1`)
 - `OPEN_PATH` (default `/`)
 
+### One-command deploy update
+
+Use this to commit + test + push and trigger deploy from your current branch:
+
+```bash
+bash ./deploy-update.sh "Your commit message"
+```
+
+Notes:
+- Default behavior does **not** merge into `master`, to avoid extra queued runs.
+- If you explicitly want merge-to-production, run:
+
+```bash
+MERGE_TO_PRODUCTION=1 PRODUCTION_BRANCH=master bash ./deploy.sh "Your commit message"
+```
+
 ### Quick checks
 
 Run the project smoke checks:
