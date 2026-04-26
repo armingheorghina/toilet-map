@@ -6,9 +6,15 @@
     <title>Toilet Map Cluj-Napoca</title>
     <meta
       name="description"
-      content="Mobile-friendly MapLibre map of public toilets in Cluj-Napoca, including custom locations."
+      content="Mobile-friendly MapTiler streets map of public toilets in Cluj-Napoca, including custom locations."
     >
     <link rel="icon" href="./src/toilet.png" type="image/png" sizes="32x32">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    >
     <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
     <link rel="stylesheet" href="./src/styles.css">
   </head>
@@ -18,73 +24,36 @@
         <div>
           <p class="eyebrow">Public Toilets</p>
           <h1>Toilet Map Cluj-Napoca</h1>
+          <p class="subhead">Când te scapă, te scapă!</p>
         </div>
       </header>
 
       <main class="page">
-        <section class="hero-card">
-          <p class="hero-text">
-            Browse public toilets from OpenStreetMap across Cluj-Napoca with a simple mobile-friendly map.
-          </p>
-          <div class="legend" aria-label="Marker legend">
-            <span class="legend-item">
-              <span class="legend-dot legend-dot-custom"></span>
-              Your saved toilets
-            </span>
-          </div>
-
-          <details class="add-toilet-panel">
-            <summary class="add-toilet-summary">Add a toilet</summary>
-            <form id="add-toilet-form" class="add-toilet-form">
-              <p class="add-toilet-hint">
-                Add a place you want to remember. It stays on this device only.
-              </p>
-              <label class="field">
-                <span class="field-label">Name</span>
-                <input name="name" type="text" required autocomplete="off" placeholder="e.g. Mall restroom">
-              </label>
-              <label class="field">
-                <span class="field-label">Notes (optional)</span>
-                <textarea name="notes" rows="2" placeholder="Floor, code, hours…"></textarea>
-              </label>
-              <div class="coords-row">
-                <label class="field field--narrow">
-                  <span class="field-label">Latitude</span>
-                  <input name="lat" type="text" inputmode="decimal" required placeholder="46.77">
-                </label>
-                <label class="field field--narrow">
-                  <span class="field-label">Longitude</span>
-                  <input name="lng" type="text" inputmode="decimal" required placeholder="23.59">
-                </label>
-              </div>
-              <div class="add-toilet-actions">
-                <button type="button" id="pick-location-button" class="ghost-button">Pick on map</button>
-                <button type="button" id="use-map-center-button" class="ghost-button">Use map center</button>
-                <button type="submit" class="primary-button">Save toilet</button>
-              </div>
-            </form>
-          </details>
-        </section>
-
         <section class="map-card">
-          <div class="status-row">
-            <p id="status-message" class="status-message" role="status" aria-live="polite">
-              Loading map data...
-            </p>
-          </div>
-
-          <div class="map-helper" aria-label="Map instructions">
-            <p class="map-helper-title">Map guide</p>
-            <p id="selection-coordinates" class="map-helper-copy">
-              Tap a toilet icon to quickly see whether it is free or requires a fee.
-            </p>
-          </div>
-
           <div class="map-frame">
             <div id="map" aria-label="Map of public toilets in Cluj-Napoca"></div>
+            <div class="map-filter-controls" aria-label="Map filter controls">
+              <button
+                id="card-only-button"
+                class="map-control-button map-control-button--filter"
+                type="button"
+                aria-label="Show only toilets with card payment"
+                aria-pressed="false"
+              >
+                Card only 💳
+              </button>
+            </div>
             <div class="map-controls" aria-label="Map zoom controls">
               <button id="zoom-in-button" class="map-control-button" type="button" aria-label="Zoom in">
                 +
+              </button>
+              <button id="locate-me-button" class="map-control-button map-control-button--icon" type="button" aria-label="Locate me">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 4.93 7 13 7 13s7-8.07 7-13a7 7 0 0 0-7-7Zm0 10a3 3 0 1 1 0-6a3 3 0 0 1 0 6Z"/>
+                </svg>
+              </button>
+              <button id="tilt-toggle-button" class="map-control-button map-control-button--mode" type="button" aria-label="Toggle 2D or 3D view">
+                2D
               </button>
               <button id="zoom-out-button" class="map-control-button" type="button" aria-label="Zoom out">
                 -
@@ -96,21 +65,23 @@
     </div>
 
     <div id="support-footer" class="support-footer" hidden>
-      <p class="support-footer-text">If you like this project, support me with a coffee</p>
       <a
         id="support-footer-link"
         class="support-footer-link"
         href="#"
         rel="noopener noreferrer"
         target="_blank"
+        aria-label="Support on Ko-fi"
       >
-        <img
-          src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
-          alt="Buy Me a Coffee"
-          width="160"
-          height="45"
-          loading="lazy"
-        >
+        <span class="kofi-badge" aria-hidden="true">
+          <svg viewBox="0 0 300 110" class="kofi-badge-svg" role="img">
+            <rect x="0" y="0" width="300" height="110" rx="20" fill="#29ABE0"></rect>
+            <rect x="18" y="20" width="66" height="66" rx="12" fill="#FFFFFF"></rect>
+            <path d="M34 44h34c6.2 0 11.2 5 11.2 11.2S74.2 66.4 68 66.4h-2.9l-6.1 9.6a9.6 9.6 0 0 1-16.2 0L32.7 60.2A10.5 10.5 0 0 1 41.5 44Z" fill="#FF5E5B"></path>
+            <text x="190" y="53" text-anchor="middle" fill="#FFFFFF" font-size="22" font-family="Arial, sans-serif" font-weight="700">Donate a</text>
+            <text x="190" y="82" text-anchor="middle" fill="#FFFFFF" font-size="22" font-family="Arial, sans-serif">toilet roll 🧻</text>
+          </svg>
+        </span>
       </a>
     </div>
 

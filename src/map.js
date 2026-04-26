@@ -1,114 +1,14 @@
-import { MAPBOX_ACCESS_TOKEN } from "./mapbox-config.js";
+import { MAPTILER_API_KEY } from "./maptiler-config.js";
 import { addReview, getDefaultStarDisplay } from "./reviews.js";
 
 const TOILET_ICON_URL = "./src/toilet.png";
-
-/**
- * Mapbox style JSON URL for MapLibre.
- * Use `/styles/v1/.../outdoors-v12?access_token=` — `/style.json` on this path returns 404.
- */
-function mapStyleUrl() {
-  const token = encodeURIComponent(MAPBOX_ACCESS_TOKEN?.trim() || "");
-  return `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12?access_token=${token}`;
-}
-
-/** MapLibre does not resolve `mapbox://` URLs; rewrite them like mapbox-gl does (MIT: rowanwins/maplibregl-mapbox-request-transformer). */
-function isMapboxURL(url) {
-  return url.startsWith("mapbox:");
-}
-
-function parseUrl(url) {
-  const urlRe = /^(\w+):\/\/([^/?]*)(\/[^?]+)?\??(.+)?/;
-  const parts = url.match(urlRe);
-  if (!parts) {
-    throw new Error("Unable to parse URL object");
-  }
-  return {
-    protocol: parts[1],
-    authority: parts[2],
-    path: parts[3] || "/",
-    params: parts[4] ? parts[4].split("&") : []
-  };
-}
-
-function formatUrl(urlObject, accessToken) {
-  const apiUrlObject = parseUrl("https://api.mapbox.com");
-  urlObject.protocol = apiUrlObject.protocol;
-  urlObject.authority = apiUrlObject.authority;
-  urlObject.params.push(`access_token=${encodeURIComponent(accessToken)}`);
-  const params = urlObject.params.length ? `?${urlObject.params.join("&")}` : "";
-  return `${urlObject.protocol}://${urlObject.authority}${urlObject.path}${params}`;
-}
-
-function normalizeStyleURL(url, accessToken) {
-  const urlObject = parseUrl(url);
-  urlObject.path = `/styles/v1${urlObject.path}`;
-  return formatUrl(urlObject, accessToken);
-}
-
-function normalizeGlyphsURL(url, accessToken) {
-  const urlObject = parseUrl(url);
-  urlObject.path = `/fonts/v1${urlObject.path}`;
-  return formatUrl(urlObject, accessToken);
-}
-
-function normalizeSourceURL(url, accessToken) {
-  const urlObject = parseUrl(url);
-  urlObject.path = `/v4/${urlObject.authority}.json`;
-  urlObject.params.push("secure");
-  return formatUrl(urlObject, accessToken);
-}
-
-function normalizeSpriteURL(url, accessToken) {
-  const urlObject = parseUrl(url);
-  const pathParts = urlObject.path.split(".");
-  let properPath = pathParts[0];
-  const extension = pathParts[1] || "json";
-  let format = "";
-  if (properPath.includes("@2x")) {
-    const [base] = properPath.split("@2x");
-    properPath = base;
-    format = "@2x";
-  }
-  urlObject.path = `/styles/v1${properPath}/sprite${format}.${extension}`;
-  return formatUrl(urlObject, accessToken);
-}
-
-function transformMapboxUrl(url, resourceType, accessToken) {
-  if (url.includes("/styles/") && !url.includes("/sprite")) {
-    return { url: normalizeStyleURL(url, accessToken) };
-  }
-  if (url.includes("/sprites/")) {
-    return { url: normalizeSpriteURL(url, accessToken) };
-  }
-  if (url.includes("/fonts/")) {
-    return { url: normalizeGlyphsURL(url, accessToken) };
-  }
-  if (url.includes("/v4/")) {
-    return { url: normalizeSourceURL(url, accessToken) };
-  }
-  if (resourceType === "Source") {
-    return { url: normalizeSourceURL(url, accessToken) };
-  }
-  return undefined;
-}
-
-function createMapboxTransformRequest(accessToken) {
-  const token = accessToken?.trim();
-  return (url, resourceType) => {
-    if (token && isMapboxURL(url)) {
-      const mapped = transformMapboxUrl(url, resourceType, token);
-      if (mapped?.url) {
-        return mapped;
-      }
-    }
-    if (token && url.startsWith("https://api.mapbox.com") && !url.includes("access_token=")) {
-      const sep = url.includes("?") ? "&" : "?";
-      return { url: `${url}${sep}access_token=${encodeURIComponent(token)}` };
-    }
-    return { url };
-  };
-}
+const CLUJ_COUNTY_BOUNDS = [
+  [22.55, 46.24], // southwest [lng, lat]
+  [24.25, 47.15] // northeast [lng, lat]
+];
+const MIN_ZOOM = 10;
+const MAX_ZOOM = 18;
+const MAX_PITCH = 60;
 
 function escapeHtml(value) {
   return String(value)
@@ -204,17 +104,43 @@ function popupActionsHtml(mapsHref) {
 
 function createPopupContent(toilet) {
   const fee = feeLabelAndClass(toilet);
+  if (String(toilet.fee ?? "").trim().toLowerCase() === "customer") {
+    fee.text = "Customer";
+    fee.className = "popup-fee-tag--paid";
+  }
+  const hasWheelchair = String(toilet.wheelchair ?? "").trim().toLowerCase() === "yes";
+  const hasHandwashing = String(toilet.handwashing ?? "").trim().toLowerCase() === "yes";
+  const hasCardPayment = String(toilet.cardPayment ?? "").trim().toLowerCase() === "yes";
   const mapsHref = googleMapsUrl(toilet);
   const idAttr = encodeURIComponent(toilet.id);
 
   return `
     <article class="popup-card popup-card--compact" data-toilet-id="${idAttr}">
-      <h3 class="popup-card__title">${escapeHtml(toilet.name)}</h3>
+      <h3 class="popup-card__title">
+        ${escapeHtml(toilet.name)}
+        ${hasWheelchair ? '<span class="popup-inline-emoji" aria-label="Wheelchair accessible">♿</span>' : ""}
+      </h3>
       <dl class="popup-card__rows">
         <div class="popup-card__row">
           <dt>Fee</dt>
           <dd><span class="popup-fee-tag ${fee.className}">${escapeHtml(fee.text)}</span></dd>
         </div>
+        ${
+          hasHandwashing
+            ? `<div class="popup-card__row">
+          <dt>Handwash</dt>
+          <dd><span class="popup-fee-tag popup-fee-tag--handwash">✅</span></dd>
+        </div>`
+            : ""
+        }
+        ${
+          hasCardPayment
+            ? `<div class="popup-card__row">
+          <dt>Card payment</dt>
+          <dd><span class="popup-fee-tag popup-fee-tag--handwash">✅</span></dd>
+        </div>`
+            : ""
+        }
       </dl>
       ${reviewsSectionHtml()}
       ${popupActionsHtml(mapsHref)}
@@ -313,25 +239,26 @@ function buildMarker(map, toilet) {
 
 export function createMap({ containerId, center }) {
   if (typeof maplibregl === "undefined") {
-    throw new Error("MapLibre GL failed to load. Check the maplibre-gl script in index.html.");
+    throw new Error("MapLibre GL JS failed to load. Check the maplibre-gl script in index.html.");
   }
 
-  if (!MAPBOX_ACCESS_TOKEN?.trim()) {
+  const mapTilerKey = MAPTILER_API_KEY?.trim() || "";
+  if (!mapTilerKey) {
     console.warn(
-      "Mapbox: missing MAPBOX_ACCESS_TOKEN. Copy src/mapbox-config.example.js to src/mapbox-config.js and add your token."
+      "MapTiler: missing MAPTILER_API_KEY. Copy src/maptiler-config.example.js to src/maptiler-config.js and add your key."
     );
   }
 
-  const token = MAPBOX_ACCESS_TOKEN?.trim() || "";
-
   const map = new maplibregl.Map({
     container: containerId,
-    style: mapStyleUrl(),
+    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${encodeURIComponent(mapTilerKey)}`,
     center: [center.lng, center.lat],
     zoom: center.zoom,
-    attributionControl: false,
-    transformRequest: createMapboxTransformRequest(token),
-    validateStyle: false
+    minZoom: MIN_ZOOM,
+    maxZoom: MAX_ZOOM,
+    maxPitch: MAX_PITCH,
+    maxBounds: CLUJ_COUNTY_BOUNDS,
+    attributionControl: false
   });
 
   map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
