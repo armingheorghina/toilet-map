@@ -1,8 +1,8 @@
 /**
- * Local setup: copy this file to maptiler-config.js and set your public API key.
+ * Local setup: copy this file to maptiler-config.js and set your Mapcherry token.
  *   Windows: copy src\maptiler-config.example.js src\maptiler-config.js
- * GitHub Pages: add repository secret MAPTILER_API_KEY; the deploy workflow writes maptiler-config.js.
+ * GitHub Pages: add repository secret MAPCHERRY_API_TOKEN; the deploy workflow writes maptiler-config.js.
  *
- * Restrict this key by URL in MapTiler Cloud so it only works for your dev/prod origins.
+ * Keep this token scoped to browser use and your allowed origins.
  */
-export const MAPTILER_API_KEY = "";
+export const MAPCHERRY_API_TOKEN = "";

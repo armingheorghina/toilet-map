@@ -7,7 +7,7 @@ export const CLUJ_CENTER = {
 
 const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 const FALLBACK_DATA_URL = "./src/fallback-toilets.json";
-const CACHE_KEY = "cluj-public-toilets-cache-v3";
+const CACHE_KEY = "cluj-public-toilets-cache-v4";
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 
 // --- Cache (OSM snapshot, separate from user custom toilets in storage.js) ---
@@ -63,6 +63,7 @@ function normalizeToilet(item) {
     charge: item.charge ?? null,
     wheelchair: item.wheelchair ?? null,
     handwashing: item.handwashing ?? item.toiletsHandwashing ?? null,
+    cardPayment: item.cardPayment ?? item.paymentCreditCards ?? null,
     openingHours: item.openingHours ?? item.opening_hours ?? null,
     notes: item.notes ?? null
   };
@@ -87,6 +88,7 @@ function normalizeOverpassElement(element) {
     charge: element.tags?.charge ?? null,
     wheelchair: element.tags?.wheelchair ?? null,
     toiletsHandwashing: element.tags?.["toilets:handwashing"] ?? null,
+    paymentCreditCards: element.tags?.["payment:credit_cards"] ?? null,
     opening_hours: element.tags?.opening_hours ?? null,
     notes: element.tags?.description ?? null
   });

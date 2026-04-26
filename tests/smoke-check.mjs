@@ -15,7 +15,7 @@ function run() {
   const styles = read("src/styles.css");
   const siteConfig = read("src/site-config.js");
 
-  assert.match(html, /Când te scapa, te scapă!/);
+  assert.match(html, /Când te scapă, te scapă!/);
   assert.doesNotMatch(html, /Your saved toilets/i);
   assert.doesNotMatch(html, /Browse public toilets from OpenStreetMap/i);
   assert.doesNotMatch(html, /Loading map data/i);

@@ -1,4 +1,4 @@
-import { MAPTILER_API_KEY } from "./maptiler-config.js";
+import { MAPCHERRY_API_TOKEN } from "./maptiler-config.js";
 import { addReview, getDefaultStarDisplay } from "./reviews.js";
 
 const TOILET_ICON_URL = "./src/toilet.png";
@@ -110,6 +110,7 @@ function createPopupContent(toilet) {
   }
   const hasWheelchair = String(toilet.wheelchair ?? "").trim().toLowerCase() === "yes";
   const hasHandwashing = String(toilet.handwashing ?? "").trim().toLowerCase() === "yes";
+  const hasCardPayment = String(toilet.cardPayment ?? "").trim().toLowerCase() === "yes";
   const mapsHref = googleMapsUrl(toilet);
   const idAttr = encodeURIComponent(toilet.id);
 
@@ -129,6 +130,14 @@ function createPopupContent(toilet) {
             ? `<div class="popup-card__row">
           <dt>Handwash</dt>
           <dd><span class="popup-fee-tag popup-fee-tag--handwash">✅</span></dd>
+        </div>`
+            : ""
+        }
+        ${
+          hasCardPayment
+            ? `<div class="popup-card__row">
+          <dt>Card payment</dt>
+          <dd><span class="popup-fee-tag popup-fee-tag--handwash">💳 ✅</span></dd>
         </div>`
             : ""
         }
@@ -233,16 +242,16 @@ export function createMap({ containerId, center }) {
     throw new Error("MapLibre GL JS failed to load. Check the maplibre-gl script in index.html.");
   }
 
-  const mapTilerKey = MAPTILER_API_KEY?.trim() || "";
-  if (!mapTilerKey) {
+  const mapcherryToken = MAPCHERRY_API_TOKEN?.trim() || "";
+  if (!mapcherryToken) {
     console.warn(
-      "MapTiler: missing MAPTILER_API_KEY. Copy src/maptiler-config.example.js to src/maptiler-config.js and add your key."
+      "Mapcherry: missing MAPCHERRY_API_TOKEN. Copy src/maptiler-config.example.js to src/maptiler-config.js and add your token."
     );
   }
 
   const map = new maplibregl.Map({
     container: containerId,
-    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${encodeURIComponent(mapTilerKey)}`,
+    style: `https://api.mapcherry.io/styles/base.json?token=${encodeURIComponent(mapcherryToken)}`,
     center: [center.lng, center.lat],
     zoom: center.zoom,
     minZoom: MIN_ZOOM,
