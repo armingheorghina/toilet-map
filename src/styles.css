@@ -53,9 +53,9 @@ button {
 }
 
 .app-shell {
-  width: min(100%, 1120px);
+  width: min(100%, 1360px);
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .topbar {
@@ -133,6 +133,16 @@ button {
   pointer-events: auto;
 }
 
+.map-filter-controls {
+  position: absolute;
+  z-index: 2500;
+  left: 0.65rem;
+  top: 0.65rem;
+  display: grid;
+  gap: 0.35rem;
+  pointer-events: auto;
+}
+
 .map-control-button,
 .primary-button,
 .ghost-button {
@@ -200,6 +210,19 @@ button {
   min-width: 34px;
   font-size: 0.7rem;
   letter-spacing: 0.02em;
+}
+
+.map-control-button--filter {
+  min-width: 76px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.72rem;
+  line-height: 1.1;
+}
+
+.map-control-button--filter[data-active="true"] {
+  background: #17b486;
+  border-color: #14986f;
+  color: #06251c;
 }
 
 .user-location-dot {

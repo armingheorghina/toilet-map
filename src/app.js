@@ -16,14 +16,19 @@ const zoomInButton = document.querySelector("#zoom-in-button");
 const zoomOutButton = document.querySelector("#zoom-out-button");
 const locateMeButton = document.querySelector("#locate-me-button");
 const tiltToggleButton = document.querySelector("#tilt-toggle-button");
+const cardOnlyButton = document.querySelector("#card-only-button");
 const supportFooter = document.querySelector("#support-footer");
 const supportLink = document.querySelector("#support-footer-link");
 
 let osmToilets = [];
 let markerLayer = null;
 let userLocationMarker = null;
+let cardOnlyActive = false;
 
 function toiletsForMap() {
+  if (cardOnlyActive) {
+    return osmToilets.filter((toilet) => String(toilet.cardPayment ?? "").trim().toLowerCase() === "yes");
+  }
   return [...osmToilets];
 }
 
@@ -79,6 +84,14 @@ function updateTiltToggleLabel() {
   tiltToggleButton.textContent = map.getPitch() > 0 ? "3D" : "2D";
 }
 
+function updateCardOnlyButtonState() {
+  if (!cardOnlyButton) {
+    return;
+  }
+  cardOnlyButton.dataset.active = String(cardOnlyActive);
+  cardOnlyButton.setAttribute("aria-pressed", String(cardOnlyActive));
+}
+
 if (map) {
   map.on("pitchend", updateTiltToggleLabel);
 
@@ -111,7 +124,13 @@ if (map) {
     const nextPitch = map.getPitch() > 0 ? 0 : 55;
     map.easeTo({ pitch: nextPitch, duration: 320 });
   });
+  cardOnlyButton?.addEventListener("click", () => {
+    cardOnlyActive = !cardOnlyActive;
+    updateCardOnlyButtonState();
+    refreshMarkers();
+  });
 
   updateTiltToggleLabel();
+  updateCardOnlyButtonState();
   loadOsmToilets();
 }
