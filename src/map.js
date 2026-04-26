@@ -1,4 +1,4 @@
-import { MAPCHERRY_API_TOKEN } from "./maptiler-config.js";
+import { MAPTILER_API_KEY } from "./maptiler-config.js";
 import { addReview, getDefaultStarDisplay } from "./reviews.js";
 
 const TOILET_ICON_URL = "./src/toilet.png";
@@ -137,7 +137,7 @@ function createPopupContent(toilet) {
           hasCardPayment
             ? `<div class="popup-card__row">
           <dt>Card payment</dt>
-          <dd><span class="popup-fee-tag popup-fee-tag--handwash">💳 ✅</span></dd>
+          <dd><span class="popup-fee-tag popup-fee-tag--handwash">✅</span></dd>
         </div>`
             : ""
         }
@@ -242,16 +242,16 @@ export function createMap({ containerId, center }) {
     throw new Error("MapLibre GL JS failed to load. Check the maplibre-gl script in index.html.");
   }
 
-  const mapcherryToken = MAPCHERRY_API_TOKEN?.trim() || "";
-  if (!mapcherryToken) {
+  const mapTilerKey = MAPTILER_API_KEY?.trim() || "";
+  if (!mapTilerKey) {
     console.warn(
-      "Mapcherry: missing MAPCHERRY_API_TOKEN. Copy src/maptiler-config.example.js to src/maptiler-config.js and add your token."
+      "MapTiler: missing MAPTILER_API_KEY. Copy src/maptiler-config.example.js to src/maptiler-config.js and add your key."
     );
   }
 
   const map = new maplibregl.Map({
     container: containerId,
-    style: `https://api.mapcherry.io/styles/base.json?token=${encodeURIComponent(mapcherryToken)}`,
+    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${encodeURIComponent(mapTilerKey)}`,
     center: [center.lng, center.lat],
     zoom: center.zoom,
     minZoom: MIN_ZOOM,

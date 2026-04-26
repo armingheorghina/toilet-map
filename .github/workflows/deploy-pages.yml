@@ -27,28 +27,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Write Mapcherry config from secret
+      - name: Write MapTiler config from secret
         env:
-          MAPCHERRY_API_TOKEN: ${{ secrets.MAPCHERRY_API_TOKEN }}
+          MAPTILER_API_KEY: ${{ secrets.MAPTILER_API_KEY }}
         run: |
-          if [ -z "${MAPCHERRY_API_TOKEN}" ]; then
-            echo "::error::Repository secret MAPCHERRY_API_TOKEN is not set. Add it under Settings -> Secrets and variables -> Actions."
+          if [ -z "${MAPTILER_API_KEY}" ]; then
+            echo "::error::Repository secret MAPTILER_API_KEY is not set. Add it under Settings → Secrets and variables → Actions."
             exit 1
           fi
           node <<'NODE'
           const fs = require("fs");
-          let token = process.env.MAPCHERRY_API_TOKEN || "";
-          token = token.replace(/\r\n/g, "\n").trim();
-          if ((token.startsWith('"') && token.endsWith('"')) || (token.startsWith("'") && token.endsWith("'"))) {
-            token = token.slice(1, -1).trim();
+          let key = process.env.MAPTILER_API_KEY || "";
+          key = key.replace(/\r\n/g, "\n").trim();
+          if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
+            key = key.slice(1, -1).trim();
           }
-          if (!token) {
-            console.error("MAPCHERRY_API_TOKEN is empty after trim");
+          if (!key) {
+            console.error("MAPTILER_API_KEY is empty after trim");
             process.exit(1);
           }
           const body =
-            "/**\n * Generated in CI from MAPCHERRY_API_TOKEN - do not commit.\n */\n" +
-            `export const MAPCHERRY_API_TOKEN = ${JSON.stringify(token)};\n`;
+            "/**\n * Generated in CI from MAPTILER_API_KEY — do not commit.\n */\n" +
+            `export const MAPTILER_API_KEY = ${JSON.stringify(key)};\n`;
           fs.writeFileSync("src/maptiler-config.js", body, "utf8");
           NODE
 
