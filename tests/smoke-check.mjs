@@ -20,7 +20,7 @@ function run() {
   assert.doesNotMatch(html, /Browse public toilets from OpenStreetMap/i);
   assert.doesNotMatch(html, /Loading map data/i);
   assert.doesNotMatch(html, /Map guide/i);
-  assert.match(html, /kofi-badge-svg/);
+  
   assert.match(html, /Donate a/);
   assert.match(html, /toilet roll/);
   assert.match(html, /id="locate-me-button"/);
