@@ -325,7 +325,9 @@ button {
 }
 
 #map .maplibregl-ctrl-attrib.maplibregl-compact {
-  min-height: auto;
+  margin-left: 0.45rem;
+  margin-bottom: 0.45rem;
+  z-index: 1;
 }
 
 #map .maplibregl-ctrl-attrib,
