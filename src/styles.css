@@ -143,6 +143,97 @@ button {
   pointer-events: auto;
 }
 
+.map-card-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 10px;
+  background: rgb(45 92 140 / 90%);
+  border: 1px solid #1a4a72;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
+}
+
+.map-card-toggle__label {
+  color: #e8f4fc;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.map-card-toggle__switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 44px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.map-card-toggle__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.map-card-toggle__slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: #2d5c8c;
+  border: 1px solid #1a4a72;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.map-card-toggle__slider::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #e8f4fc;
+  transition: transform 140ms ease-in;
+}
+
+.map-card-toggle__icon {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 7px;
+  left: 6px;
+  object-fit: contain;
+  object-position: center;
+  z-index: 1;
+  
+  transition: transform 140ms ease;
+}
+
+.map-card-toggle__input:checked + .map-card-toggle__slider {
+  background: #17b486;
+  border-color: #14986f;
+}
+
+.map-card-toggle__input:checked + .map-card-toggle__slider::before {
+  transform: translateX(20px);
+}
+
+.map-card-toggle__input:checked + .map-card-toggle__slider .map-card-toggle__icon {
+  transform: translateX(20px);
+}
+
+.map-card-toggle__input:focus-visible + .map-card-toggle__slider {
+  outline: 2px solid #8adbc7;
+  outline-offset: 2px;
+}
+
 .map-control-button,
 .primary-button,
 .ghost-button {
@@ -186,7 +277,7 @@ button {
   line-height: 1;
   border-radius: 8px;
   color: #e8f4fc;
-  background: #2d5c8c;
+  background: rgb(45 92 140 / 90%);
   border: 1px solid #1a4a72;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
 }
@@ -210,19 +301,6 @@ button {
   min-width: 34px;
   font-size: 0.7rem;
   letter-spacing: 0.02em;
-}
-
-.map-control-button--filter {
-  min-width: 76px;
-  padding: 0.25rem 0.55rem;
-  font-size: 0.72rem;
-  line-height: 1.1;
-}
-
-.map-control-button--filter[data-active="true"] {
-  background: #17b486;
-  border-color: #14986f;
-  color: #06251c;
 }
 
 .user-location-dot {
@@ -325,7 +403,7 @@ button {
 }
 
 #map .maplibregl-ctrl-attrib.maplibregl-compact {
-  margin-left: 0.45rem;
+    margin-left: 0.45rem;
   margin-bottom: 0.45rem;
   z-index: 1;
 }

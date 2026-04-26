@@ -33,15 +33,19 @@
           <div class="map-frame">
             <div id="map" aria-label="Map of public toilets in Cluj-Napoca"></div>
             <div class="map-filter-controls" aria-label="Map filter controls">
-              <button
-                id="card-only-button"
-                class="map-control-button map-control-button--filter"
-                type="button"
-                aria-label="Show only toilets with card payment"
-                aria-pressed="false"
-              >
-                Card only 💳
-              </button>
+              <div class="map-card-toggle">
+                <span class="map-card-toggle__label">Accepts card 💳</span>
+                <label class="map-card-toggle__switch" for="card-only-toggle">
+                  <input
+                    id="card-only-toggle"
+                    class="map-card-toggle__input"
+                    type="checkbox"
+                    aria-label="Show only toilets with card payment"
+                  >
+                  <span class="map-card-toggle__slider">
+                  </span>
+                </label>
+              </div>
             </div>
             <div class="map-controls" aria-label="Map zoom controls">
               <button id="zoom-in-button" class="map-control-button" type="button" aria-label="Zoom in">
@@ -75,7 +79,6 @@
       >
         <span class="kofi-badge" aria-hidden="true">
             <path d="M34 44h34c6.2 0 11.2 5 11.2 11.2S74.2 66.4 68 66.4h-2.9l-6.1 9.6a9.6 9.6 0 0 1-16.2 0L32.7 60.2A10.5 10.5 0 0 1 41.5 44Z" fill="#FF5E5B"></path>
-            
           </svg>
         </span>
       </a>
